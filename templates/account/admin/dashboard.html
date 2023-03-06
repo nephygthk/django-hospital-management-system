@@ -1,0 +1,48 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<h1 class="mb-4 text-primary">Dashboard</h1>
+
+<div class="row pt-3">
+    <div class="table-responsive">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Patient Name</th>
+                  <th scope="col">Date of Birth</th>
+                  <th scope="col">BG</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col">Password</th>
+                  <th scope="col">Patient ID</th>
+                  <th scope="col">Admited On</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+            </thead>
+        
+            <tbody class="table-dark border-0">
+            {% for customer in customers %}
+                <tr>
+                  <!-- <th scope="row">1</th> -->
+                  <td>{{customer.patient.full_name}}</td>
+                  <td>{{customer.patient.date_of_birth}}</td>
+                  <td>{{customer.patient.blood_group}}</td>
+                  <td>{{customer.email}}</td>
+                  <td>{{customer.patient.phone_number}}</td>
+                  <td>wyhitnhonamd</td>
+                  <td>{{customer.patient.patient_id}}</td>
+                  <td>{{customer.patient.admission_date}}</td>
+                  <td><a href=""><i class="fa-solid fa-pen"></i></a></td>
+                  <td><a href=""><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>
+{% endblock %}
