@@ -1,8 +1,6 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from account.forms import UserLoginForm
-
 from . import views
 
 app_name = "account"
@@ -14,6 +12,8 @@ urlpatterns = [
 
     # admin urls
     path('admin_dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
+    path('add_patient/', views.AddPatientView.as_view(), name='add_patient'),
+    path('add_doctor/', views.AddAndViewDoctorView.as_view(), name='add_doctor'),
 
     # patient urls
     path('patient_dashboard/', views.patient_dashboard, name='patient_dashboard')

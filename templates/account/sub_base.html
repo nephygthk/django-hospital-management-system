@@ -1,7 +1,7 @@
 {% extends '../base.html' %}
 {% load static %}
 
-{% block extra_css %} <link rel="stylesheet" href="{% static 'css/sidebar.css' %}"> {% endblock %}
+<!-- {% block extra_css %} <link rel="stylesheet" href="{% static 'css/sidebar.css' %}"> {% endblock %} -->
 
 {% block extra_js %} <script src="{% static 'js/sidebar.js' %}"></script> {% endblock%}
 
@@ -20,7 +20,10 @@
             <a href="{% url 'account:admin_dashboard' %}"><span class="fa fa-home mr-3"></span> Dashboard</a>
         </li>
         <li>
-            <a href="#"><span class="fa-solid fa-stethoscope mr-3"></span> Doctor</a>
+            <a href="{% url 'account:add_patient' %}"><span class="fa-solid fa-cash-register mr-3"></span> Add Patient</a>
+        </li>
+        <li>
+            <a href="{% url 'account:add_doctor' %}"><span class="fa-solid fa-stethoscope mr-3"></span> Doctor</a>
         </li>
         <li>
             <a href="#"><span class="fa-solid fa-calendar-check mr-3"></span> Appointment</a>

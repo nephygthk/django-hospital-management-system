@@ -4,6 +4,14 @@
 
 {% block sub_base_content %}
 <h1 class="mb-4 text-primary">Dashboard</h1>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="row pt-3">
     <div class="table-responsive">
