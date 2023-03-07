@@ -70,12 +70,14 @@ class Patient(models.Model):
 
 class Billing(models.Model):
     patient = models.ForeignKey(Patient, related_name='billing', on_delete=models.CASCADE)
-    report_summary = models.TextField()
+    report_summary = models.TextField(null=True, blank=True)
     days_spent = models.IntegerField(null=True, blank=True)
     billing_date = models.DateField()
     bill_amount = models.DecimalField(max_digits=10, decimal_places=2)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    # created = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.patient.full_name

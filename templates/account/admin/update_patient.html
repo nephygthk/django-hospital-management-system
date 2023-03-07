@@ -1,0 +1,116 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<!-- <h2 class="mb-4 text-primary">Add a Patient</h2> -->
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-9">
+        <div class="card bg-dark shadow rounded card-sm">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card-body">
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Update Patient Information</h3>
+
+                <form action="." method="POST">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form2.full_name.id_for_label }}" class="form-label fw-bold text-white">Full Name</label>
+                                {{ form2.full_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form2.patient_id.id_for_label }}" class="form-label fw-bold text-white">Patient ID</label>
+                                {{ form2.patient_id}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form2.address.id_for_label }}" class="form-label fw-bold text-white">Patient Address</label>
+                                {{ form2.address}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.gender.id_for_label }}" class="form-label fw-bold text-white">Gender</label>
+                                {{ form2.gender }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.blood_group.id_for_label }}" class="form-label fw-bold text-white">Blood Group</label>
+                                {{ form2.blood_group }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.date_of_birth.id_for_label }}" class="form-label fw-bold text-white">Birth Date</label>
+                                {{ form2.date_of_birth}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.phone_number.id_for_label }}" class="form-label fw-bold text-white">Phone Number</label>
+                                {{ form2.phone_number}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.admission_date.id_for_label }}" class="form-label fw-bold text-white">Admition Date</label>
+                                {{ form2.admission_date}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.discharge_date.id_for_label }}" class="form-label fw-bold text-white">Discharge Date</label>
+                                {{ form2.discharge_date}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form2.doctor.id_for_label }}" class="form-label fw-bold text-white">Doctor</label>
+                                {{ form2.doctor}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label fw-bold text-white">Email</label>
+                                {{ form.email}}
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

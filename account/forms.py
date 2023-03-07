@@ -2,7 +2,11 @@ from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
-from .models import Customer, Doctor, Patient
+from .models import Billing, Customer, Doctor, Patient
+
+
+class DateInput(forms.DateInput):
+	input_type = 'date'
 
 
 class PatientForm(forms.ModelForm):
@@ -10,10 +14,15 @@ class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['full_name','patient_id','gender', 'date_of_birth', 'blood_group','address',
-                  'phone_number', 'admission_date','discharge_date','doctor']
+                  'phone_number', 'admission_date','discharge_date','doctor','pass_text']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['pass_text'].widget = forms.HiddenInput()
+        self.fields['date_of_birth'].widget = DateInput()
+        self.fields['admission_date'].widget = DateInput()
+        self.fields['discharge_date'].widget = DateInput()
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
@@ -64,6 +73,33 @@ class AddDoctorForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class BillingForm(forms.ModelForm):
+
+    class Meta:
+        model = Billing
+        fields = "__all__"
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+# class CustomerUpdateForm(forms.ModelForm):
+#     # email = forms.EmailField(max_length=100, help_text='Required', error_messages={
+#     #     'required': 'Sorry, you will need an email'})
+    
+#     class Meta:
+#         model = Customer
+#         fields = ['email']
+    
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['email'].widget.attrs.update(
+#             {'class': 'form-control mb-3', 'id': 'id_email'})
 
 
 

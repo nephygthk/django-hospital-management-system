@@ -28,29 +28,35 @@
                   <th scope="col">Patient ID</th>
                   <th scope="col">Admited On</th>
                   <th scope="col"></th>
-                  <th scope="col"></th>
+                  <!-- <th scope="col"></th> -->
                 </tr>
             </thead>
         
             <tbody class="table-dark border-0">
             {% for customer in customers %}
+                {% with patient=customer.patient %}
                 <tr>
                   <!-- <th scope="row">1</th> -->
                   <td>{{customer.patient.full_name}}</td>
                   <td>{{customer.patient.date_of_birth}}</td>
-                  <td>{{customer.patient.blood_group}}</td>
+                  <td>{{patient.blood_group}}</td>
                   <td>{{customer.email}}</td>
                   <td>{{customer.patient.phone_number}}</td>
-                  <td>wyhitnhonamd</td>
+                  <td>{{patient.pass_text}}</td>
                   <td>{{customer.patient.patient_id}}</td>
                   <td>{{customer.patient.admission_date}}</td>
-                  <td><a href=""><i class="fa-solid fa-pen"></i></a></td>
-                  <td><a href=""><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                  <td><a href="{% url 'account:delete_patient' customer.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
                 </tr>
+                {% endwith %}
             {% endfor %}
             </tbody>
         
         </table>
     </div>
 </div>
+
+
+
 {% endblock %}
+
+<!-- <td><a href="{% url 'account:update_patient' customer.id %}"><i class="fa-solid fa-pen"></i></a></td> -->

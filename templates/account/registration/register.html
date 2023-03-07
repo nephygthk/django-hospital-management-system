@@ -131,7 +131,15 @@
                                 {{ patient_form.doctor}}
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <!-- <label for="{{ patient_form.pass_text.id_for_label }}" class="form-label fw-bold text-white">Doctor</label> -->
+                                {{ patient_form.pass_text}}
+                            </div>
+                        </div>
+                        
                     </div>
+                    
                     <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
                 </form>
             </div>
@@ -140,8 +148,18 @@
 </div>
 
 
+<!-- javascript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
 
+<script>
+	$("#id_password").keyup(function(){
+    update();
+	});
 
+	function update() {
+	  $("#id_pass_text").val($('#id_password').val() );
+	};
+</script>
 
 <script>
 	function myFunction() {
