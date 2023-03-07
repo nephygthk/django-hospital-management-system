@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
-from .models import Billing, Customer, Doctor, Patient
+from .models import (Billing, BillingItem, BillingSpecification,
+            Customer, Doctor, Patient)
 
 
 class DateInput(forms.DateInput):
@@ -76,6 +77,8 @@ class AddDoctorForm(forms.ModelForm):
 
 
 class BillingForm(forms.ModelForm):
+    report_summary = forms.CharField(
+        label='Report Summary', widget=forms.Textarea(attrs={'rows':4, 'cols':15}),)
 
     class Meta:
         model = Billing
@@ -84,9 +87,36 @@ class BillingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['billing_date'].widget = DateInput()
+
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
+class BillSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = BillingSpecification
+        fields = '__all__'
+        exclude = ['created']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+
+class BillingItemForm(forms.ModelForm):
+    class Meta:
+        model = BillingItem
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 # class CustomerUpdateForm(forms.ModelForm):
 #     # email = forms.EmailField(max_length=100, help_text='Required', error_messages={

@@ -18,7 +18,7 @@
             {% endif %}
 
             <div class="card-body">
-                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add A Patient</h3>
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add New Patient</h3>
 
                 <form action="{% url 'account:add_patient' %}" method="POST">
                     {% csrf_token %}

@@ -6,9 +6,11 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms.models import modelform_factory
 
-from .models import Billing, Customer, Doctor, Patient
-from .forms import AddDoctorForm, BillingForm, RegistrationForm, PatientForm
+from .models import Billing, BillingSpecification, Customer, Doctor, Patient
+from .forms import (AddDoctorForm, BillSpecificationForm,
+            BillingForm, BillingItemForm, RegistrationForm, PatientForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -62,7 +64,7 @@ class AddPatientView(LoginRequiredMixin, TemplateView):
                     )
 
             return HttpResponseRedirect(
-                reverse_lazy('account:admin_dashboard')
+                reverse_lazy('account:all_patient')
             )
         
         return self.render_to_response(
@@ -78,6 +80,18 @@ class AddPatientView(LoginRequiredMixin, TemplateView):
         if 'patient_form' not in kwargs:
             kwargs['patient_form'] = PatientForm()
         return super().get_context_data(**kwargs)
+    
+
+class AllPatientView(LoginRequiredMixin, ListView):
+    model = Patient
+    template_name = 'account/admin/patient.html'
+    context_object_name = 'patients'
+    paginate_by = 20
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_staff:
+            return HttpResponse("Error handler content", status=400)
+        return super().dispatch(request, *args, **kwargs)
     
 
 # class UpdatePatientView(UpdateView):
@@ -160,6 +174,13 @@ class AddAndViewDoctorView(LoginRequiredMixin, CreateView):
        return context
     
 
+def delete_doctor(request, pk):
+    doctor = get_object_or_404(Doctor, id=pk)
+    doctor.delete()
+    messages.success(request, 'Doctor deleted successfully')
+    return redirect('account:add_doctor')
+    
+
 class AddBillingView(TemplateView):
     model = Billing
     form_class = BillingForm
@@ -170,11 +191,16 @@ class AddBillingView(TemplateView):
             return HttpResponse("Error handler content", status=400)
         return super().dispatch(request, *args, **kwargs)
     
+    
     def post(self, request, *args, **kwargs):
         billing_form = BillingForm(self.request.POST)
+        bill_item_form = BillingItemForm(self.request.POST)
 
-        if billing_form.is_valid():
-            billing_form.save()
+        if billing_form.is_valid() and bill_item_form.is_valid():
+            billingme = billing_form.save()
+            billingus = bill_item_form.save(commit=False)
+            billingus.billing = billingme
+            billingus.save()
 
             messages.success(
                 self.request,
@@ -182,19 +208,53 @@ class AddBillingView(TemplateView):
             )
 
             return HttpResponseRedirect(
-                    reverse_lazy('account:add_billing')
+                    reverse_lazy('account:all_billing')
                 )
-        
+        print('not valid')
         return self.render_to_response(
             self.get_context_data(
                 billing_form=billing_form,
+                bill_item_form=bill_item_form,
             )
         )
     
     def get_context_data(self, **kwargs):
         if 'billing_form' not in kwargs:
             kwargs['billing_form'] = BillingForm()
+        if 'bill_item_form' not in kwargs:
+            kwargs['bill_item_form'] = BillingItemForm()
         return super().get_context_data(**kwargs)
+
+
+
+class AllBillingsView(LoginRequiredMixin, ListView):
+    model = Billing
+    template_name = 'account/admin/billings.html'
+    context_object_name = 'billings'
+    paginate_by = 20
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_staff:
+            return HttpResponse("Error handler content", status=400)
+        return super().dispatch(request, *args, **kwargs)	
+    
+
+def delete_billing(request, pk):
+    billing = get_object_or_404(Billing, id=pk)
+    billing.delete()
+    messages.success(request, 'Billing deleted successfully')
+    return redirect('account:add_billing')
+    
+class AddBillSpecificationView(LoginRequiredMixin, CreateView):
+    model = BillingSpecification
+    form_class = BillSpecificationForm
+    template_name = "account/admin/add_bill_specification.html"
+    success_url = reverse_lazy('account:add_billing_specification')
+
+    def get_context_data(self, **kwargs):
+       context = super(AddBillSpecificationView, self).get_context_data(**kwargs)
+       context['bill_specs'] = BillingSpecification.objects.all()
+       return context
 
 
 

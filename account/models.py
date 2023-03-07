@@ -69,16 +69,45 @@ class Patient(models.Model):
     
 
 class Billing(models.Model):
-    patient = models.ForeignKey(Patient, related_name='billing', on_delete=models.CASCADE)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
     report_summary = models.TextField(null=True, blank=True)
     days_spent = models.IntegerField(null=True, blank=True)
     billing_date = models.DateField()
     bill_amount = models.DecimalField(max_digits=10, decimal_places=2)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    # created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
 
 
     def __str__(self):
         return self.patient.full_name
+    
+    def save(self, *args, **kwargs):
+        self.balance = self.bill_amount - self.paid_amount
+        super(Billing, self).save(*args, **kwargs)
+    
+
+class BillingSpecification(models.Model):
+    # billing = models.ForeignKey(Billing, related_name='billing', on_delete=models.CASCADE)
+    spec_name = models.CharField(max_length=150, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.spec_name
+    
+
+class BillingItem(models.Model):
+    billing = models.ForeignKey(Billing, related_name='billing_items', on_delete=models.CASCADE, null=True, blank=True)
+    billing_specification = models.ForeignKey(BillingSpecification, related_name='billing_item', on_delete=models.CASCADE)
+    bill_value = models.CharField(max_length=30, null=True, blank=True)
+    bill_qty = models.CharField(max_length=30, default=1)
+
+    def __str__(self):
+        return self.billing_specification.spec_name
+    
+    def get_single_total(self, *args, **kwargs):
+        return int(self.bill_value) * int(self.bill_qty)
+
 

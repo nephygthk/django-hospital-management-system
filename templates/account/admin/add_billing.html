@@ -27,7 +27,7 @@
                 {% endif %}
                 <h3 class="card-title mb-5 bg-secondary text-center text-light">Add Billing</h3>
                 
-                <form action="{% url 'account:add_doctor' %}" method="POST">
+                <form action="{% url 'account:add_billing' %}" method="POST">
                     {% csrf_token %}
 
                     {% if billing_form.errors %}
@@ -40,40 +40,82 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
+                    {% if billing_item_form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in billing_item_form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ billing_form.patient.id_for_label}}" class="form-label fw-bold text-white">Patient Name</label>
                                 {{ billing_form.patient }}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ billing_form.bill_amount.id_for_label}}" class="form-label fw-bold text-white">Bill Amount</label>
                                 {{ billing_form.bill_amount }}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ billing_form.paid_amount.id_for_label}}" class="form-label fw-bold text-white">Paid Amount</label>
                                 {{ billing_form.paid_amount }}
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.billing_date.id_for_label}}" class="form-label fw-bold text-white">Billing Date</label>
+                                {{ billing_form.billing_date }}
+                            </div>
+                        </div> 
+                        
                     </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.report_summary.id_for_label}}" class="form-label fw-bold text-white">Report Summary <span class="text-white small">
+                                    (Optional)</span></label>
+                                {{ billing_form.report_summary }}
+                            </div>
+                        </div>             
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.days_spent.id_for_label}}" class="form-label fw-bold text-white">Days Spent <span class="text-white small">
+                                    (Optional)</span></label>
+                                {{ billing_form.days_spent }}
+                            </div>
+                        </div>             
+                    </div>
+                    <hr class="bg-white">
+                    <h3 class="text-center py-1 bg-primary text-white">Services Rendered</h3>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="{{ billing_form.balance.id_for_label}}" class="form-label fw-bold text-white">Balance</label>
-                                {{ billing_form.balance }}
+                                <label for="{{ bill_item_form.billing_specification.id_for_label}}" class="form-label fw-bold text-white">Specification</label>
+                                {{ bill_item_form.billing_specification }}
                             </div>
                         </div>
-                        <!-- <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="{{ form.job_title.id_for_label}}" class="form-label fw-bold text-white">Job Title</label>
-                                {{ form.job_title }}
+                                <label for="{{ bill_item_form.bill_qty.id_for_label}}" class="form-label fw-bold text-white">Quantity</label>
+                                {{ bill_item_form.bill_qty }}
                             </div>
-                        </div> -->
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ bill_item_form.bill_value.id_for_label}}" class="form-label fw-bold text-white">Prize</label>
+                                {{ bill_item_form.bill_value }}
+                            </div>
+                        </div>
+                        
                     </div>
                     <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
                 </form>
@@ -88,22 +130,26 @@
         <table class="table table-secondary table-hover">
             <thead>
                 <tr>
-                  <th scope="col">Doctor Name</th>
-                  <th scope="col">Doctor Email</th>
-                  <th scope="col">Doctor Mobile</th>
-                  <th scope="col">Job Title</th>
+                  <th scope="col">Patient</th>
+                  <th scope="col">Bill Amount</th>
+                  <th scope="col">Paid Amount</th>
+                  <th scope="col">Balance</th>
+                  <th scope="col">Bill Date</th>
+                  <th scope="col"></th>
                   <th scope="col"></th>
                 </tr>
             </thead>
         
             <tbody class="table-dark border-0">
-            {% for doctor in doctors %}
+            {% for bill in all_bills %}
                 <tr>
-                  <td>{{doctor.doc_name}}</td>
-                  <td>{{doctor.doc_email}}</td>
-                  <td>{{doctor.mobile}}</td>
-                  <td>{{doctor.job_title}}</td>
-                  <td><a href=""><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                  <td>{{bill.patient}}</td>
+                  <td>{{bill.bill_amount}}</td>
+                  <td>{{bill.paid_amount}}</td>
+                  <td>{{bill.balance}}</td>
+                  <td>{{bill.billing_date}}</td>
+                  <td><a href=""><i class="fa-solid fa-pen"></i></a></td>
+                  <td><a href="{% url 'account:delete_billing' bill.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>

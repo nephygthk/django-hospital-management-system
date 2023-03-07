@@ -20,16 +20,16 @@
             <a href="{% url 'account:admin_dashboard' %}"><span class="fa fa-home mr-3"></span> Dashboard</a>
         </li>
         <li>
-            <a href="{% url 'account:add_patient' %}"><span class="fa-solid fa-cash-register mr-3"></span> Add Patient</a>
+            <a href="{% url 'account:all_patient' %}"><span class="fa-solid fa-cash-register mr-3"></span> Patient</a>
         </li>
         <li>
             <a href="{% url 'account:add_doctor' %}"><span class="fa-solid fa-stethoscope mr-3"></span> Doctor</a>
         </li>
         <li>
-            <a href="#"><span class="fa-solid fa-calendar-check mr-3"></span> Appointment</a>
+            <a href="{% url 'account:add_billing_specification' %}"><span class="fa-solid fa-calendar-check mr-3"></span> Bill Specification</a>
         </li>
         <li>
-            <a href="{% url 'account:add_billing' %}"><span class="fa-solid fa-cash-register mr-3"></span> Billing</a>
+            <a href="{% url 'account:all_billings' %}"><span class="fa-solid fa-cash-register mr-3"></span> Billing</a>
         </li>
         <li>
             <a href="#"><span class="fa fa-paper-plane mr-3"></span> Prescription</a>

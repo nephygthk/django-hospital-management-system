@@ -5,7 +5,7 @@
 {% block sub_base_content %}
 
 <div class="row align-items-center justify-content-center">
-    <div class="col-md-9">
+    <div class="col-md-4">
         <div class="card bg-dark shadow rounded card-sm">
             {% if form.non_field_errors %}
                 {% for error in form.non_field_errors %}
@@ -25,9 +25,9 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add A Doctor</h3>
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add Bill Specification</h3>
                 
-                <form action="{% url 'account:add_doctor' %}" method="POST">
+                <form action="{% url 'account:add_billing_specification' %}" method="POST">
                     {% csrf_token %}
 
                     {% if form.errors %}
@@ -42,30 +42,10 @@
                     {% endif %}
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="mb-3">
-                                <label for="{{ form.doc_name.id_for_label}}" class="form-label fw-bold text-white">Doctor Name</label>
-                                {{ form.doc_name }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.doc_email.id_for_label}}" class="form-label fw-bold text-white">Doctor Email</label>
-                                {{ form.doc_email }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.mobile.id_for_label}}" class="form-label fw-bold text-white">Phone Number</label>
-                                {{ form.mobile }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.job_title.id_for_label}}" class="form-label fw-bold text-white">Job Title</label>
-                                {{ form.job_title }}
+                                <label for="{{ form.doc_name.id_for_label}}" class="form-label fw-bold text-white">Specification Name</label>
+                                {{ form.spec_name}}
                             </div>
                         </div>
                     </div>
@@ -83,23 +63,19 @@
             <thead>
                 <tr>
                   <!-- <th scope="col">#</th> -->
-                  <th scope="col">Doctor Name</th>
-                  <th scope="col">Doctor Email</th>
-                  <th scope="col">Doctor Mobile</th>
-                  <th scope="col">Job Title</th>
+                  <th scope="col">Specification Name</th>
+                  <th scope="col">Date Created</th>
                   <th scope="col"></th>
                 </tr>
             </thead>
         
             <tbody class="table-dark border-0">
-            {% for doctor in doctors %}
+            {% for spec in bill_specs %}
                 <tr>
                   <!-- <th scope="row">1</th> -->
-                  <td>{{doctor.doc_name}}</td>
-                  <td>{{doctor.doc_email}}</td>
-                  <td>{{doctor.mobile}}</td>
-                  <td>{{doctor.job_title}}</td>
-                  <td><a href="{% url 'account:delete_doctor' doctor.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                  <td>{{spec.spec_name}}</td>
+                  <td>{{spec.created}}</td>
+                  <td><a href=""><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -109,3 +85,4 @@
 </div>
 
 {% endblock %}
+<!-- <td><a href="{% url 'account:delete_doctor' doctor.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td> -->
