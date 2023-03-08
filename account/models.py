@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from .managers import CustomAccountManager
+from decimal import Decimal
+
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
@@ -73,7 +75,7 @@ class Billing(models.Model):
     report_summary = models.TextField(null=True, blank=True)
     days_spent = models.IntegerField(null=True, blank=True)
     billing_date = models.DateField()
-    bill_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    bill_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -85,15 +87,22 @@ class Billing(models.Model):
     def __str__(self):
         return self.patient.full_name
     
-    def save(self, *args, **kwargs):
-        self.balance = self.bill_amount - self.paid_amount
-        super(Billing, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.balance = self.bill_amount - self.paid_amount
+    #     super(Billing, self).save(*args, **kwargs)
+
+    def get_balance(self):
+        return self.bill_amount - self.paid_amount
     
 
 class BillingSpecification(models.Model):
     # billing = models.ForeignKey(Billing, related_name='billing', on_delete=models.CASCADE)
     spec_name = models.CharField(max_length=150, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
+
     def __str__(self):
         return self.spec_name
     

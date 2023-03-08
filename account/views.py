@@ -1,16 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView, CreateView, UpdateView
+from django.views.generic import (ListView, TemplateView, CreateView,
+                                UpdateView, DetailView)
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
-from django.forms.models import modelform_factory
+from decimal import Decimal
 
-from .models import Billing, BillingSpecification, Customer, Doctor, Patient
+
+from .models import Billing, BillingItem, BillingSpecification, Customer, Doctor, Patient
 from .forms import (AddDoctorForm, BillSpecificationForm,
-            BillingForm, BillingItemForm, RegistrationForm, PatientForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, RegistrationForm, PatientForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -93,42 +96,21 @@ class AllPatientView(LoginRequiredMixin, ListView):
             return HttpResponse("Error handler content", status=400)
         return super().dispatch(request, *args, **kwargs)
     
+def UpdatePatientView(request, pk):
+    if not request.user.is_staff:
+        return HttpResponse("Error handler content", status=400)
+    customer = get_object_or_404(Customer, pk=pk)
+    patient = get_object_or_404(Patient, customer=customer)
+    customer_form = CustomerUpdateForm(request.POST or None, instance=customer)
+    patient_form = PatientForm(request.POST or None, instance=patient)
 
-# class UpdatePatientView(UpdateView):
-#     model = Customer
-#     form_class  = CustomerUpdateForm
-#     second_form_class = PatientForm
-#     template_name = "account/admin/update_patient.html"
+    if all([customer_form.is_valid(), patient_form.is_valid() ]):
+        customer_form.save()
+        patient_form.save()
+        return redirect('account:admin_dashboard')
 
-#     def dispatch(self, request, *args, **kwargs):
-#         if not self.request.user.is_staff:
-#             return HttpResponse("Error handler content", status=400)
-#         return super().dispatch(request, *args, **kwargs)
-    
-#     def get_context_data(self, **kwargs):
-#         kwargs['active_client'] = True
-#         if 'form' not in kwargs:
-#             kwargs['form'] = self.form_class(instance=self.get_object())
-#         if 'form2' not in kwargs:
-#             kwargs['form2'] = self.second_form_class(instance=self.get_object().patient) 
-#         return super(UpdatePatientView, self).get_context_data(**kwargs)
-    
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.form_class(request.POST)
-#         form2 = self.second_form_class(request.POST)
-
-#         if form.is_valid() and form2.is_valid():
-#             form.save()
-#             form2.save()
-#             messages.success(self.request, 'Patient Updated successfully')
-#             return HttpResponseRedirect(self.get_success_url())
-#         else:
-#             return self.render_to_response(
-#               self.get_context_data(form=form, form2=form2))
-        
-#     def get_success_url(self):
-#         return reverse_lazy('account:admin_dashboard')
+    context = {'form':customer_form, 'form2':patient_form }
+    return render(request, "account/admin/update_patient.html", context )
 
 
 def delete_patient_account(request, pk):
@@ -180,51 +162,56 @@ def delete_doctor(request, pk):
     messages.success(request, 'Doctor deleted successfully')
     return redirect('account:add_doctor')
     
+def add_new_billing(request):
+    if request.method == "POST":
+        form = BillingForm(request.POST)
+        formset = BillingItemFormSet(request.POST)
+        try:
+            if form.is_valid and formset.is_valid():
+                prices = []
+                parent = form.save()
+                for form in formset:
+                    child = form.save(commit=False)
+                    child.billing = parent
+                    child.save()
+                    prices.append(child.bill_value)
+                price = sum(Decimal(price)  for price in prices)
+                print(type(price))
+                parent.bill_amount = sum(Decimal(price)  for price in prices)
+                parent.save()
+                return redirect('account:all_billings')
+        except ValueError:
+            messages.success(request, 'A bill for this patient already exist')
+            return redirect('account:add_billing')
+    else:
+        form = BillingForm()
+        formset = BillingItemFormSet()
+    context = {'billing_form':form, 'bill_item_form':formset }
+    return render(request, 'account/admin/add_billing.html', context )
 
-class AddBillingView(TemplateView):
-    model = Billing
-    form_class = BillingForm
-    template_name = 'account/admin/add_billing.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_staff:
-            return HttpResponse("Error handler content", status=400)
-        return super().dispatch(request, *args, **kwargs)
-    
-    
-    def post(self, request, *args, **kwargs):
-        billing_form = BillingForm(self.request.POST)
-        bill_item_form = BillingItemForm(self.request.POST)
+def edit_billing(request, pk):
+    billing = get_object_or_404(Billing, pk=pk)
+    billing_item = BillingItem.objects.filter(billing=billing)
+    form = BillingForm(request.POST or None, instance=billing)
+    formset = EditBillingItemFormSet(request.POST or None, queryset=billing_item)
 
-        if billing_form.is_valid() and bill_item_form.is_valid():
-            billingme = billing_form.save()
-            billingus = bill_item_form.save(commit=False)
-            billingus.billing = billingme
-            billingus.save()
+    if all([form.is_valid(), formset.is_valid()]):
+        form.save()
+        formset.save()
+        messages.success(request, 'The bill was updated successfully')
+        return redirect('account:all_billings')
 
-            messages.success(
-                self.request,
-                f'Bill added successfully'
-            )
+    context = {'billing_form':form, 'bill_item_form':formset}
+    return render(request, "account/admin/edit_billing.html", context)
 
-            return HttpResponseRedirect(
-                    reverse_lazy('account:all_billing')
-                )
-        print('not valid')
-        return self.render_to_response(
-            self.get_context_data(
-                billing_form=billing_form,
-                bill_item_form=bill_item_form,
-            )
-        )
-    
-    def get_context_data(self, **kwargs):
-        if 'billing_form' not in kwargs:
-            kwargs['billing_form'] = BillingForm()
-        if 'bill_item_form' not in kwargs:
-            kwargs['bill_item_form'] = BillingItemForm()
-        return super().get_context_data(**kwargs)
 
+def BillingDetailsView(request, pk):
+    billing_detail =  get_object_or_404(Billing, pk=pk)
+    bill_items = BillingItem.objects.filter(billing=billing_detail)
+
+    context = {'bill':billing_detail, 'bill_items':bill_items}
+    return render(request, "account/admin/billing_detail.html", context)
 
 
 class AllBillingsView(LoginRequiredMixin, ListView):
@@ -243,7 +230,7 @@ def delete_billing(request, pk):
     billing = get_object_or_404(Billing, id=pk)
     billing.delete()
     messages.success(request, 'Billing deleted successfully')
-    return redirect('account:add_billing')
+    return redirect('account:all_billings')
     
 class AddBillSpecificationView(LoginRequiredMixin, CreateView):
     model = BillingSpecification
@@ -255,6 +242,13 @@ class AddBillSpecificationView(LoginRequiredMixin, CreateView):
        context = super(AddBillSpecificationView, self).get_context_data(**kwargs)
        context['bill_specs'] = BillingSpecification.objects.all()
        return context
+    
+
+def delete_billing_specification(request, pk):
+    billing_spec = get_object_or_404(BillingSpecification, id=pk)
+    billing_spec.delete()
+    messages.success(request, 'Billing Specification deleted successfully')
+    return redirect('account:add_billing_specification')
 
 
 

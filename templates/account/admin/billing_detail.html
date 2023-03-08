@@ -1,0 +1,87 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+
+
+
+<div class="row pt-5">
+    <h3 class="card-title mb-5 bg-secondary text-center text-light">{{bill.patient.full_name|title}} Bill Details</h3>
+    <hr class="bg-dark">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-item-center justify-content-between">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Patient Name:</div>
+                              </div>
+                              <span>{{bill.patient.full_name}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Bill Amount:</div>
+                                </div>
+                                <span>{{bill.bill_amount}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Paid Amount:</div>
+                                </div>
+                                <span>{{bill.paid_amount}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Balance:</div>
+                                </div>
+                                <span>{{bill.get_balance}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">No of Days:</div>
+                                </div>
+                                <span>{{bill.days_spent}}</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="table-responsive">
+            <table class="table table-secondary table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">Specification</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                </thead>
+            
+                <tbody class="table-dark border-0">
+                    {% for billing in bill_items %}
+                    <tr>
+                      <td>{{billing.billing_specification}}</td>
+                      <td>{{billing.bill_value}}</td>
+                      <td>{{billing.bill_qty}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -65,7 +65,7 @@
                   <!-- <th scope="col">#</th> -->
                   <th scope="col">Specification Name</th>
                   <th scope="col">Date Created</th>
-                  <th scope="col"></th>
+                  <!-- <th scope="col"></th> -->
                 </tr>
             </thead>
         
@@ -75,7 +75,7 @@
                   <!-- <th scope="row">1</th> -->
                   <td>{{spec.spec_name}}</td>
                   <td>{{spec.created}}</td>
-                  <td><a href=""><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                  <!-- <td><a href="{% url 'account:delete_billing_specification' spec.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td> -->
                 </tr>
             {% endfor %}
             </tbody>

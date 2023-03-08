@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import formset_factory, modelformset_factory
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
@@ -111,25 +112,39 @@ class BillingItemForm(forms.ModelForm):
     class Meta:
         model = BillingItem
         fields = '__all__'
+        exclude = ['billing']
 
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+
+    #     for field in self.fields:
+    #         self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class CustomerUpdateForm(forms.ModelForm):
+    email = forms.EmailField(max_length=100, help_text='Required', error_messages={
+        'required': 'Sorry, you will need an email'})
+    
+    class Meta:
+        model = Customer
+        fields = ['email']
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update(
+            {'class': 'form-control mb-3', 'id': 'id_email'})
 
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
-# class CustomerUpdateForm(forms.ModelForm):
-#     # email = forms.EmailField(max_length=100, help_text='Required', error_messages={
-#     #     'required': 'Sorry, you will need an email'})
-    
-#     class Meta:
-#         model = Customer
-#         fields = ['email']
-    
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.fields['email'].widget.attrs.update(
-#             {'class': 'form-control mb-3', 'id': 'id_email'})
+
+BillingItemFormSet = formset_factory(
+    BillingItemForm,
+    extra=4,
+)
+
+EditBillingItemFormSet = modelformset_factory(
+    BillingItem,
+    BillingItemForm,
+    extra=0,
+)
 
 
 
