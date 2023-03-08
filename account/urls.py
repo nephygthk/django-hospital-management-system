@@ -25,7 +25,12 @@ urlpatterns = [
     path('<pk>/delete_billing/', views.delete_billing, name='delete_billing'),
     path('add_billing_specification/', views.AddBillSpecificationView.as_view(), name='add_billing_specification'),
     path('<pk>/delete_billing_specification/', views.delete_billing_specification, name='delete_billing_specification'),
+    path('payment_list/', views.PaymentListView.as_view(), name='payment_list'),
+    path('add_prescription/', views.PrescriptionView.as_view(), name='add_prescription'),
+    
 
     # patient urls
-    path('patient_dashboard/', views.patient_dashboard, name='patient_dashboard')
+    path('patient_dashboard/', views.patient_dashboard, name='patient_dashboard'),
+    path('patient_status/', views.patient_status, name='patient_status'),
+    path('patient_billing/', views.patient_billing, name='patient_billing'),
 ]

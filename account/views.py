@@ -11,9 +11,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from decimal import Decimal
 
 
-from .models import Billing, BillingItem, BillingSpecification, Customer, Doctor, Patient
+from .models import (Billing, BillingItem, BillingSpecification,
+            Customer, Doctor, Patient, Payment, Prescription)
 from .forms import (AddDoctorForm, BillSpecificationForm,
-            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, RegistrationForm, PatientForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PrescriptionForm, RegistrationForm, PatientForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -38,6 +39,7 @@ def login_user(request):
     else:
         messages.info(request, 'Username OR password is incorrect')
     return render(request, 'account/login.html', {})
+
 
 
 class AddPatientView(LoginRequiredMixin, TemplateView):
@@ -95,7 +97,9 @@ class AllPatientView(LoginRequiredMixin, ListView):
         if not self.request.user.is_staff:
             return HttpResponse("Error handler content", status=400)
         return super().dispatch(request, *args, **kwargs)
-    
+
+
+@login_required
 def UpdatePatientView(request, pk):
     if not request.user.is_staff:
         return HttpResponse("Error handler content", status=400)
@@ -113,6 +117,7 @@ def UpdatePatientView(request, pk):
     return render(request, "account/admin/update_patient.html", context )
 
 
+@login_required
 def delete_patient_account(request, pk):
     customer = get_object_or_404(Customer, id=pk)
     customer.delete()
@@ -156,12 +161,15 @@ class AddAndViewDoctorView(LoginRequiredMixin, CreateView):
        return context
     
 
+@login_required
 def delete_doctor(request, pk):
     doctor = get_object_or_404(Doctor, id=pk)
     doctor.delete()
     messages.success(request, 'Doctor deleted successfully')
     return redirect('account:add_doctor')
-    
+
+
+@login_required   
 def add_new_billing(request):
     if request.method == "POST":
         form = BillingForm(request.POST)
@@ -175,8 +183,8 @@ def add_new_billing(request):
                     child.billing = parent
                     child.save()
                     prices.append(child.bill_value)
-                price = sum(Decimal(price)  for price in prices)
-                print(type(price))
+                # price = sum(Decimal(price)  for price in prices)
+                # print(type(price))
                 parent.bill_amount = sum(Decimal(price)  for price in prices)
                 parent.save()
                 return redirect('account:all_billings')
@@ -190,6 +198,7 @@ def add_new_billing(request):
     return render(request, 'account/admin/add_billing.html', context )
 
 
+@login_required
 def edit_billing(request, pk):
     billing = get_object_or_404(Billing, pk=pk)
     billing_item = BillingItem.objects.filter(billing=billing)
@@ -197,8 +206,17 @@ def edit_billing(request, pk):
     formset = EditBillingItemFormSet(request.POST or None, queryset=billing_item)
 
     if all([form.is_valid(), formset.is_valid()]):
-        form.save()
-        formset.save()
+        prices = []
+        parent = form.save()
+        # child = formset.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.billing = parent
+            child.save()
+            prices.append(child.bill_value)
+        parent.bill_amount = sum(Decimal(price)  for price in prices)
+        parent.save()
+
         messages.success(request, 'The bill was updated successfully')
         return redirect('account:all_billings')
 
@@ -206,6 +224,7 @@ def edit_billing(request, pk):
     return render(request, "account/admin/edit_billing.html", context)
 
 
+@login_required
 def BillingDetailsView(request, pk):
     billing_detail =  get_object_or_404(Billing, pk=pk)
     bill_items = BillingItem.objects.filter(billing=billing_detail)
@@ -226,6 +245,7 @@ class AllBillingsView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)	
     
 
+@login_required
 def delete_billing(request, pk):
     billing = get_object_or_404(Billing, id=pk)
     billing.delete()
@@ -244,6 +264,7 @@ class AddBillSpecificationView(LoginRequiredMixin, CreateView):
        return context
     
 
+@login_required
 def delete_billing_specification(request, pk):
     billing_spec = get_object_or_404(BillingSpecification, id=pk)
     billing_spec.delete()
@@ -251,7 +272,63 @@ def delete_billing_specification(request, pk):
     return redirect('account:add_billing_specification')
 
 
+class PaymentListView(LoginRequiredMixin, ListView):
+    model = Payment
+    template_name = 'account/admin/payment.html'
+    context_object_name = 'payments'
+    # paginate_by = 20
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_staff:
+            return HttpResponse("Error handler content", status=400)
+        return super().dispatch(request, *args, **kwargs)	
+    
+
+class PrescriptionView(LoginRequiredMixin, CreateView):
+    form_class = PrescriptionForm
+    success_url = reverse_lazy('account:add_prescription')
+    template_name = 'account/admin/add_prescription.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_staff:
+            return HttpResponse("Error handler content", status=400)
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            f'Precsription added successfully'
+        )
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(PrescriptionView, self).get_context_data(**kwargs)
+       context['prescriptions'] = Prescription.objects.all()
+       return context
+
+
+
+# Patient side
 @login_required
 def patient_dashboard(request):
-    return render(request, 'account/patient/p_dashboard.html', {})
+    patient = Patient.objects.get(customer=request.user)
+
+    context = {'patient':patient}
+    return render(request, 'account/patient/p_dashboard.html', context)
+
+
+@login_required
+def patient_status(request):
+    patient = Patient.objects.get(customer=request.user)
+
+    context = {'patient':patient}
+    return render(request, 'account/patient/patient_status.html', context)
+
+
+@login_required
+def patient_billing(request):
+    bills = Billing.objects.filter(patient=request.user.patient)
+    bill_items = BillingItem.objects.filter(billing=request.user.patient.billing)
+
+    context = {'bills':bills, 'bill_items': bill_items}
+    return render(request, 'account/patient/patient_billing.html', context)

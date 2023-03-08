@@ -1,0 +1,38 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<h1 class="mb-4 text-primary">Payments</h1>
+
+<div class="row pt-3">
+    <div class="table-responsive">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Patient Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Uploaded payment Receipt</th>
+                  <th scope="col">Date Paid</th>
+                </tr>
+            </thead>
+        
+            <tbody class="table-dark border-0">
+            {% for payment in payments %}
+                <tr>
+                  <td>{{payment.patient.full_name}}</td>
+                  <td>{{payment.amount}}</td>
+                  <td>{{payment.receipt}}</td>
+                  <td>{{payment.date_created}}</td>              
+                </tr>
+            {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock %}

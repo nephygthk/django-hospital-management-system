@@ -4,6 +4,12 @@
 
 {% block sub_base_content %}
 
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
+
 <div class="row align-items-center justify-content-center">
     <div class="col-md-9">
         <div class="card bg-dark shadow rounded card-sm">
@@ -58,12 +64,6 @@
                                 {{ billing_form.patient }}
                             </div>
                         </div>
-                        <!-- <div class="col-md-3">
-                            <div class="mb-3">
-                                <label for="{{ billing_form.bill_amount.id_for_label}}" class="form-label fw-bold text-white">Bill Amount</label>
-                                {{ billing_form.bill_amount }}
-                            </div>
-                        </div> -->
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="{{ billing_form.paid_amount.id_for_label}}" class="form-label fw-bold text-white">Paid Amount</label>
@@ -97,7 +97,15 @@
                     <hr class="bg-white">
                     <h3 class="text-center py-1 bg-primary text-white">Services Rendered</h3>
                     {{ bill_item_form.management_form }}
-                        {{bill_item_form}}
+                    <div id="bill-item-form-list">
+                        {% for form in bill_item_form %}
+                            <div class="bill-item-form ">                     
+                                {{bill_item_form}}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div id="empty-form" class="hidden">{{bill_item_form.empty_form}}</div>
+                    <button type="button" id="add-more" class="my-3">Add service <i class="fa-solid fa-plus"></i></button>
 
                     <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
                 </form>
@@ -105,5 +113,32 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    const addMoreBtn = document.getElementById('add-more')
+    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+    
+
+
+    addMoreBtn.addEventListener('click', add_new_form)
+    function add_new_form(event){
+        if(event){
+            event.preventDefault()
+        }
+        const currentBillItemForms = document.getElementsByClassName('bill-item-form')
+        const currentFormCount = currentBillItemForms.length //+ 1
+        const formCopyTarget = document.getElementById('bill-item-form-list')
+        const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormEl.setAttribute('class', 'bill-item-form')
+        copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+        // adding a new form element to my html form
+        formCopyTarget.append(copyEmptyFormEl)
+    }
+</script>
 
 {% endblock %}

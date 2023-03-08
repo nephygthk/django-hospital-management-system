@@ -96,7 +96,6 @@ class Billing(models.Model):
     
 
 class BillingSpecification(models.Model):
-    # billing = models.ForeignKey(Billing, related_name='billing', on_delete=models.CASCADE)
     spec_name = models.CharField(max_length=150, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -118,5 +117,32 @@ class BillingItem(models.Model):
     
     def get_single_total(self, *args, **kwargs):
         return int(self.bill_value) * int(self.bill_qty)
+    
+
+class Prescription(models.Model):
+    patient = models.ForeignKey(Patient, related_name='prescription', on_delete=models.CASCADE)
+    cash_manager = models.CharField(max_length=150)
+    hospital = models.CharField(max_length=150)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return self.patient.full_name
+    
+
+class Payment(models.Model):
+    patient = models.ForeignKey(Patient, related_name='payment', on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    receipt = models.CharField(max_length=150)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-date_created',)
+
+    def __str__(self):
+        return self.patient.full_name
 
 

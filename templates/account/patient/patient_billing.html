@@ -1,0 +1,150 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<h1 class="mb-4 text-primary">Patient Billings</h1>
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="row align-item-center justify-content-center mt-4">
+            <div class="col-md-8 text-center">
+                <p class="text-dark">After you finish making payment as instructed by the cashier manager, You click the button below to upload your payment receipt for verification</p>
+                <a href="" class="btn btn-primary fw-bold float-center">Click To Upload Payment Receipt <i class="fa-solid fa-upload text-white ms-3"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-info">
+                      <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <!-- <th scope="col">Doctor Name</th> -->
+                        <th scope="col">Invoice Summary</th>
+                        <!-- <th scope="col">Total Bill</th>
+                        <th scope="col">Total Paid</th> -->
+                        <th scope="col">Balance To Be Paid</th>
+                        <th scope="col">Admitted On</th>
+                        <th scope="col">Discharge Date</th>
+                        <th scope="col">Invoice Date</th>
+                        <th scope="col"></th>
+                      </tr>
+                      <hr>
+                    </thead>
+                    <tbody>
+                    {% for bill in bills %}
+                      <tr>
+                        <td>{{bill.patient.patient_id}}</td>
+                        <td>{{bill.patient.full_name}}</td>
+                        <!-- <td>{{bill.patient.doctor}}</td> -->
+                        <td>{{bill.report_summary}}</td>
+                        <!-- <td>{{bill.bill_amount}}</td>
+                        <td>{{bill.paid_amount}}</td> -->
+                        <td>{{bill.get_balance}}</td>
+                        <td>{{bill.patient.admission_date}}</td>
+                        <td>{{bill.patient.discharge_date}}</td>
+                        <td>{{bill.created}}</td>
+                        <td><a href="" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <h3 class="text-center text-info">More Billing Details</h3>
+            {% for bill in bills %}
+            <hr class="bg-dark">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row align-item-center justify-content-between">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Patient Name:</div>
+                                    </div>
+                                    <span>{{bill.patient.full_name}}</span>
+                                    </li>
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                        <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Bill Amount:</div>
+                                        </div>
+                                        <span>{{bill.bill_amount}}</span>
+                                    </li>
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                        <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Paid Amount:</div>
+                                        </div>
+                                        <span>{{bill.paid_amount}}</span>
+                                    </li>
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                        <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Balance:</div>
+                                        </div>
+                                        <span>{{bill.get_balance}}</span>
+                                    </li>
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                        <div class="ms-2 me-auto">
+                                        <div class="fw-bold">No of Days:</div>
+                                        </div>
+                                        <span>{{bill.days_spent}}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                        <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Doctor:</div>
+                                        </div>
+                                        <span>{{request.user.patient.doctor}}</span>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-info">
+                            <tr>
+                              <th scope="col">Specification</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                    
+                        <tbody>
+                            {% for billing in bill_items %}
+                            <tr>
+                              <td>{{billing.billing_specification}}</td>
+                              <td>{{billing.bill_value}}</td>
+                              <td>{{billing.bill_qty}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

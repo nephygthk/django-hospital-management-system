@@ -3,5 +3,57 @@
 
 
 {% block sub_base_content %}
+<style>
+    @media screen and (max-width: 600px) {
+        .kpom{
+            font-size: 13px;
+        }
+    }
+</style>
 <h1 class="mb-4 text-primary">Dashboard</h1>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-info">
+                      <tr>
+                        <th scope="col">SL</th>
+                        <th scope="col">Appointment ID</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Appointment Date</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Patient ID</th>
+                      </tr>
+                      <hr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                      </tr>
+                      <tr>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</div>
+    
 {% endblock %}

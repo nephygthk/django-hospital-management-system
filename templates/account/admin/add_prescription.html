@@ -1,0 +1,83 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark shadow rounded card-sm">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add A Prescription</h3>
+                
+                <form action="{% url 'account:add_prescription' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        {{form.as_p}}
+                    </div>
+                    <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row pt-5">
+    <div class="table-responsive">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Patient Name</th>
+                  <th scope="col">Cashier</th>
+                  <th scope="col">Hospital</th>
+                  <th scope="col">Date Created</th>
+                </tr>
+            </thead>
+        
+            <tbody class="table-dark border-0">
+            {% for x in prescriptions %}
+                <tr>
+                  <td>{{x.patient.full_name}}</td>
+                  <td>{{x.cash_manager}}</td>
+                  <td>{{x.hospital}}</td>
+                  <td>{{x.created}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>
+
+{% endblock %}

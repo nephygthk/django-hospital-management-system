@@ -1,0 +1,57 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<style>
+    @media screen and (max-width: 600px) {
+        .kpom{
+            font-size: 13px;
+        }
+    }
+</style>
+<h2 class="mb-4 text-primary">Patient Status</h2>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row py-4">
+            <div class="col-md-5">
+                write
+            </div>
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-5 text-end border-end border-1 border-dark text-dark">
+                        <p class="fw-bold kpom">Patient Name:</p>
+                        <p class="fw-bold kpom">Patient ID:</p>
+                        <p class="fw-bold kpom">Gender:</p>
+                        <p class="fw-bold kpom">Date of Birth:</p>
+                        <p class="fw-bold kpom">Blood Group:</p>
+                        <p class="fw-bold kpom">Home Address:</p>
+                        <p class="fw-bold kpom">Email Address:</p>
+                        <p class="fw-bold kpom">Mobile Number:</p>
+                        <p class="fw-bold kpom">Hospital Name:</p>
+                        <p class="fw-bold kpom">Hospital Address:</p>
+                        <p class="fw-bold kpom">Admitted On:</p>
+                    </div>
+                    <div class="col-7 text-dark" >
+                        <p class="kpom">{{patient.full_name|title}}</p>
+                        <p class="kpom">{{patient.patient_id}}</p>
+                        <p class="kpom">{{patient.gender}}</p>
+                        <p class="kpom">{{patient.date_of_birth}}</p>
+                        <p class="kpom">{{patient.blood_group}}</p>
+                        <p class="kpom">{{patient.address}}</p>
+                        <p class="kpom">{{request.user.email}}</p>
+                        <p class="kpom">{{patient.phone_number}}</p>
+                        <p class="kpom">Cleveland Medical Center</p>
+                        <p class="kpom">24 Portland Place, London, W18 1LU</p>
+                        <p class="kpom">{{patient.admission_date}}</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}
