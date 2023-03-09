@@ -87,9 +87,6 @@ class Billing(models.Model):
     def __str__(self):
         return self.patient.full_name
     
-    # def save(self, *args, **kwargs):
-    #     self.balance = self.bill_amount - self.paid_amount
-    #     super(Billing, self).save(*args, **kwargs)
 
     def get_balance(self):
         return self.bill_amount - self.paid_amount
@@ -133,14 +130,23 @@ class Prescription(models.Model):
     
 
 class Payment(models.Model):
+    billing = models.ForeignKey(Billing, related_name='payment', on_delete=models.CASCADE, null=True, blank=True)
     patient = models.ForeignKey(Patient, related_name='payment', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     receipt = models.CharField(max_length=150)
+    payment_summary = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('-date_created',)
+
+    def __str__(self):
+        return self.patient.full_name
+    
+
+class Apointment(models.Model):
+    patient = models.ForeignKey(Patient, related_name='appointment', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.patient.full_name

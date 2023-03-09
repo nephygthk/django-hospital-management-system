@@ -11,10 +11,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from decimal import Decimal
 
 
-from .models import (Billing, BillingItem, BillingSpecification,
+from .models import (Apointment, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
 from .forms import (AddDoctorForm, BillSpecificationForm,
-            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PrescriptionForm, RegistrationForm, PatientForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -305,15 +305,25 @@ class PrescriptionView(LoginRequiredMixin, CreateView):
        context = super(PrescriptionView, self).get_context_data(**kwargs)
        context['prescriptions'] = Prescription.objects.all()
        return context
+    
+
+@login_required
+def delete_payment(request, pk):
+    payment = get_object_or_404(Payment, id=pk)
+    payment.delete()
+    messages.success(request, 'payment deleted successfully')
+    return redirect('account:payment_list')
 
 
 
 # Patient side
 @login_required
 def patient_dashboard(request):
-    patient = Patient.objects.get(customer=request.user)
+    apointments = Apointment.objects.filter(patient=request.user.patient)
+    a_length = len(apointments)
+    
 
-    context = {'patient':patient}
+    context = {'apointments':apointments, 'a_length':a_length}
     return render(request, 'account/patient/p_dashboard.html', context)
 
 
@@ -332,3 +342,27 @@ def patient_billing(request):
 
     context = {'bills':bills, 'bill_items': bill_items}
     return render(request, 'account/patient/patient_billing.html', context)
+
+
+@login_required
+def make_payment(request):
+    payments = Payment.objects.filter(patient=request.user.patient)
+    p_length = len(payments)
+    billing = get_object_or_404(Billing, patient=request.user.patient)
+
+    payment_form = PaymentForm(request.POST or None)
+    if payment_form.is_valid():
+        payment = payment_form.save(commit=False)
+        payment.patient = request.user.patient
+        payment.billing = billing
+        payment.save()
+
+        messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
+        return redirect('account:make_payment')
+
+    context = {'payments':payments, 'form': payment_form, 'p_length':p_length}
+    return render(request, 'account/patient/make_payment.html', context)
+
+
+def view_receipt(request):
+    return render(request, 'account/receipt/bill_receipt.html')

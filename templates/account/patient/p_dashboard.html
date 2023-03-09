@@ -30,27 +30,22 @@
                       </tr>
                       <hr>
                     </thead>
+                {% if a_length != 0 %}
                     <tbody>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
+                        <tr>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
                     </tbody>
-                  </table>
+                {% else %} 
+                </table>
+                    <p class="text-center">No available appointment data to display</p>
+                {% endif %}
             </div>
         </div>
     </div>

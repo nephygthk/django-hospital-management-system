@@ -19,13 +19,13 @@
             <thead>
                 <tr>
                   <!-- <th scope="col">#</th> -->
+                  <th scope="col">Patient ID</th>
                   <th scope="col">Patient Name</th>
                   <th scope="col">Date of Birth</th>
                   <th scope="col">BG</th>
                   <th scope="col">Email</th>
                   <th scope="col">Mobile</th>
-                  <th scope="col">Password</th>
-                  <th scope="col">Patient ID</th>
+                  <th scope="col">Password</th>                
                   <th scope="col">Admited On</th>
                   <th scope="col"></th>
                   <th scope="col"></th>
@@ -37,13 +37,13 @@
                 {% with patient=customer.patient %}
                 <tr>
                   <!-- <th scope="row">1</th> -->
+                  <td>{{customer.patient.patient_id}}</td>
                   <td>{{customer.patient.full_name}}</td>
                   <td>{{customer.patient.date_of_birth}}</td>
                   <td>{{patient.blood_group}}</td>
                   <td>{{customer.email}}</td>
                   <td>{{customer.patient.phone_number}}</td>
-                  <td>{{patient.pass_text}}</td>
-                  <td>{{customer.patient.patient_id}}</td>
+                  <td>{{patient.pass_text}}</td>          
                   <td>{{customer.patient.admission_date}}</td>
                   <td><a href="{% url 'account:update_patient' customer.id %}"><i class="fa-solid fa-pen"></i></a></td>
                   <td><a href="{% url 'account:delete_patient' customer.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>

@@ -1,0 +1,116 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark shadow rounded card-sm">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h5 class="card-title mb-5 bg-secondary text-center text-light">Upload Payment Receipt</h5>
+                
+                <form action="{% url 'account:make_payment' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="{{form.amount.id_for_label}}" class="form-label fw-bold text-white">Amount Paid:</label>
+                            {{form.amount}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{form.receipt.id_for_label}}" class="form-label fw-bold text-white">Upload Payment Receipt:</label>
+                            {{form.receipt}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{form.payment_summary.id_for_label}}" class="form-label fw-bold text-white">Receipt Summary:</label>
+                            {{form.payment_summary}}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary text-white w-100 fw-bold float-end"><i class="fa-solid fa-right-to-bracket me-3 text-white"></i>Submit</button>  
+                    <!-- <input type="submit" value="Submit" class="btn btn-primary text-white w-100 fw-bold float-end">                    -->
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-info">
+                      <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Total Bill</th>
+                        <th scope="col">Total Paid</th>
+                        <th scope="col">Balance To Be Paid</th>
+                        <th scope="col">Admitted On</th>
+                        <th scope="col">Payment Date</th>
+                        <!-- <th scope="col">Invoice Date</th> -->
+                        <th scope="col">Receipt</th>
+                      </tr>
+                      <hr>
+                    </thead>
+                    <tbody>
+                        
+                {% if p_length != 0 %}
+                    {% for bill in payments %}
+                      <tr>
+                        <td>{{bill.patient.patient_id}}</td>
+                        <td>{{bill.patient.full_name}}</td>
+                        <td>{{bill.patient.doctor}}</td>
+                        <td>{{bill.billing.bill_amount}}</td>
+                        <td>{{bill.billing.paid_amount}}</td>
+                        <td>{{bill.billing.get_balance}}</td>
+                        <td>{{bill.patient.admission_date}}</td>
+                        <!-- <td>{{bill.patient.discharge_date}}</td> -->
+                        <td>{{bill.date_created}}</td>
+                        <td><a href="" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-center">There are no available data to display</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

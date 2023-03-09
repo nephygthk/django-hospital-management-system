@@ -24,7 +24,7 @@
         <table class="table table-secondary table-hover">
             <thead>
                 <tr>
-                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Patient ID</th>
                   <th scope="col">Patient Name</th>
                   <th scope="col">Doctor</th>
                   <th scope="col">Date of Birth</th>
@@ -32,7 +32,6 @@
                   <th scope="col">Email</th>
                   <th scope="col">Mobile</th>
                   <th scope="col">Password</th>
-                  <th scope="col">Patient ID</th>
                   <th scope="col">Admited On</th>
                   <!-- <th scope="col"></th> -->
                 </tr>
@@ -41,7 +40,7 @@
             <tbody class="table-dark border-0">
             {% for patient in patients %}
                 <tr>
-                  <!-- <th scope="row">1</th> -->
+                  <td>{{patient.patient_id}}</td>
                   <td>{{patient.full_name}}</td>
                   <td>{{patient.doctor}}</td>
                   <td>{{patient.date_of_birth}}</td>
@@ -49,7 +48,6 @@
                   <td>{{patient.customer.email}}</td>
                   <td>{{patient.phone_number}}</td>
                   <td>{{patient.pass_text}}</td>
-                  <td>{{patient.patient_id}}</td>
                   <td>{{patient.admission_date}}</td>
                   <!-- <td><a href=""><i class="fa-solid fa-pen"></i></a></td> -->
                 </tr>

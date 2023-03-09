@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
 from .models import (Billing, BillingItem, BillingSpecification,
-            Customer, Doctor, Patient, Prescription)
+            Customer, Doctor, Patient, Payment, Prescription)
 
 
 class DateInput(forms.DateInput):
@@ -139,6 +139,20 @@ class PrescriptionForm(forms.ModelForm):
         model = Prescription
         fields = '__all__'
         exclude = ['created']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = '__all__'
+        exclude = ['date_created', 'date_updated', 'patient']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -9,7 +9,7 @@
         <div class="row align-item-center justify-content-center mt-4">
             <div class="col-md-8 text-center">
                 <p class="text-dark">After you finish making payment as instructed by the cashier manager, You click the button below to upload your payment receipt for verification</p>
-                <a href="" class="btn btn-primary fw-bold float-center">Click To Upload Payment Receipt <i class="fa-solid fa-upload text-white ms-3"></i></a>
+                <a href="{% url 'account:make_payment' %}" class="btn btn-primary fw-bold float-center">Click To Upload Payment Receipt <i class="fa-solid fa-upload text-white ms-3"></i></a>
             </div>
         </div>
     </div>
@@ -26,14 +26,14 @@
                         <th scope="col">Patient ID</th>
                         <th scope="col">Patient Name</th>
                         <!-- <th scope="col">Doctor Name</th> -->
-                        <th scope="col">Invoice Summary</th>
+                        <!-- <th scope="col">Invoice Summary</th> -->
                         <!-- <th scope="col">Total Bill</th>
                         <th scope="col">Total Paid</th> -->
                         <th scope="col">Balance To Be Paid</th>
                         <th scope="col">Admitted On</th>
                         <th scope="col">Discharge Date</th>
                         <th scope="col">Invoice Date</th>
-                        <th scope="col"></th>
+                        <th scope="col">Receipt</th>
                       </tr>
                       <hr>
                     </thead>
@@ -43,14 +43,14 @@
                         <td>{{bill.patient.patient_id}}</td>
                         <td>{{bill.patient.full_name}}</td>
                         <!-- <td>{{bill.patient.doctor}}</td> -->
-                        <td>{{bill.report_summary}}</td>
+                        <!-- <td>{{bill.report_summary}}</td> -->
                         <!-- <td>{{bill.bill_amount}}</td>
                         <td>{{bill.paid_amount}}</td> -->
                         <td>{{bill.get_balance}}</td>
                         <td>{{bill.patient.admission_date}}</td>
                         <td>{{bill.patient.discharge_date}}</td>
                         <td>{{bill.created}}</td>
-                        <td><a href="" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                        <td><a href="{% url 'account:view_receipt' %}" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
                       </tr>
                     {% endfor %}
                     </tbody>
@@ -113,6 +113,14 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-3">
+                    <div class="card-body">
+                        <h5>Invoice Summary</h5>
+                        <hr class="bg-dark">
+                        <p>{{bill.report_summary}}</p>
+
                     </div>
                 </div>
             </div>
