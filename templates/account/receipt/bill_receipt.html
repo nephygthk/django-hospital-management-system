@@ -8,15 +8,17 @@
 
 <style>
    /* google font */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap'); */
+  /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto+Condensed:wght@300;400;700&family=Sacramento&display=swap'); */
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Mr+Dafoe&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
 body{
     margin: 0;
     padding: 0;
     font-size: 16px;
     font-weight: 300;
-    width: 100%;
-    background: rgb(204, 204, 204);
+    /* width: 100%; */
+    background: rgb(19, 18, 18);
     font-family: 'Roboto Condensed', sans-serif;
 }
 
@@ -38,7 +40,8 @@ p{
 }
 .page[size='A4']{
     width: 21cm;
-    height: 29.7cm;
+    /* height: 29.7cm; */
+    height: 24.7cm;
     overflow: hidden;
 }
 
@@ -85,6 +88,50 @@ p{
     margin-left: 10px;
 }
 
+@media only screen and (max-width: 600px) {
+    /* body{
+        width: none;
+    } */
+    .page{
+        margin-top: 16px;
+    }
+    .page[size='A4']{
+        width: 9.6cm;
+        /* height: 29.7cm; */
+        height: 17cm;
+        overflow: hidden;
+    }
+
+    .top-section{
+        padding: 8px;
+        height: 55px;
+    }
+    .top-section h2{
+        font-size: 16px;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .top-section p{
+        font-size: 12px;
+        margin-bottom: 2px;
+        font-weight: 300;
+    }
+    .top-section .address-content{
+        max-width: 200px;
+    }
+    .contact .contact-content{
+        max-width: 400px;
+        margin-top: 32px;
+    }
+    .contact .contact-content .email, 
+    .contact .contact-content .number{
+        font-size: 11px;
+    }
+    .contact .contact-content .email{
+        display: none;
+    }
+}
+
 /* billing-invoice */
 .billing-invoice{
     padding: 20px;
@@ -113,6 +160,23 @@ p{
     font-weight: 400;
 }
 
+@media only screen and (max-width: 600px) {
+    .billing-invoice{
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+    .billing-invoice .code{
+        font-weight: 700;
+        float: right;
+        font-size: 16px;
+    }
+    .billing-invoice .issue{
+        text-align: right;
+        font-size: 14px;
+    }
+    
+}
+
 /* billed to */
 .billed-to{
     padding: 20px;
@@ -139,7 +203,6 @@ p{
 
 .billed-to .ship-add{
     max-width: 220px;
-    /* margin-top: 26px; */
     float: right;
 }
 
@@ -149,11 +212,29 @@ p{
     margin-bottom: 9px;
     color: rgb(56, 52, 52);
 }
+@media only screen and (max-width: 600px) {
+    .billed-to{
+    padding: 10px 20px;
+    margin-top: 5px;
+    }
+
+    .billed-to .title{
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .billed-to .billed-sec p{
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+    
+}
 
 /* invoice table */
 
 .table{
     padding: 0 20px;
+    -pdf-keep-in-frame-mode: shrink;
 }
 
 .table table{
@@ -185,6 +266,114 @@ p{
     text-align: left;
     width: 300px;
 }
+
+@media only screen and (max-width: 600px) {
+    .table{
+        padding: 0 20px;
+    }
+
+    .table table, th,td{
+        padding: 3px;      
+    }
+
+    .table tr th,
+    .table tr td{
+        font-size: 13px;
+    }
+}
+
+/* grand total */
+.grandtotal_wrap{
+    padding: 20px;
+    /* margin-top: 5px; */
+}
+
+.grandtotal_wrap .grandtotal_sec{
+    max-width: 300px;
+    float: right;
+}
+
+.grandtotal_sec .grand-total,
+.grandtotal_sec .sub-total{
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.grandtotal_sec .sub-total,
+.grandtotal_sec .all_tax{
+    margin-bottom: 10px;
+}
+
+.grandtotal_sec .grand-total{
+    background-color: #6a1b9a;
+    color: #fff;
+    padding: 10px;
+}
+
+.grandtotal_sec .sub-total span,
+.grandtotal_sec .grand-total span,
+.grandtotal_sec .all_tax span{
+    margin-left: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .grandtotal_wrap{
+        padding: 10px 20px;
+    }
+
+    .grandtotal_sec .grand-total,
+    .grandtotal_sec .sub-total{
+        font-size: 12px;
+    }
+
+    .grandtotal_sec .sub-total,
+    .grandtotal_sec .all_tax{
+        margin-bottom: 4px;
+    }
+
+    .grandtotal_sec .grand-total{
+        padding: 3px 10px;
+    }
+
+    .grandtotal_sec .all_tax{
+        font-size: 12px;
+    }
+}
+
+/* bottom section */
+.bottom-section{
+    margin-top: 20px;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.bottom-section .status-content .sign-nature{
+    font-size: 24px;
+    font-weight: 400;
+    font-family: 'Mr Dafoe';
+    margin-bottom: -10px;
+}
+.sig-line{
+    width: 140px;
+    float: left;
+}
+
+@media only screen and (max-width: 600px) {
+    .bottom-section .status-content .sign-nature{
+        font-size: 18px;
+    }
+    .status{
+        font-size: 15px;
+    }
+    .sig-line{
+        width: 100px;
+    }
+}
+
+
 </style>
 </head>
 <body>
@@ -238,7 +427,6 @@ p{
                 </div>   
             </div>
         </div>
-
         <!-- invoice table -->
         <div class="table">
             <table>
@@ -246,7 +434,7 @@ p{
                     <th>SL</th>
                     <th>Service Name</th>
                     <th>QTY</th>
-                    <th>Unit prize</th>
+                    <th>Value</th>
                     <th>Total</th>
                     <!-- <th>Total</th> -->
                     <!-- <th></th> -->
@@ -257,10 +445,79 @@ p{
                     <td>2</td>
                     <td>$5,000</td>
                     <td>$10,000</td>
-                    <!-- <td>$20,000</td> -->
-                    <!-- <td></td> -->
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Surgery For Adaobi</td>
+                    <td>2</td>
+                    <td>$5,000</td>
+                    <td>$10,000</td>
                 </tr>
             </table>
+        </div>
+
+        <!-- grand total -->
+        <div class="grandtotal_wrap">
+            <div class="grandtotal_sec">
+                <div class="sub-total">
+                    SUB TOTAL: <span>$7500</span>
+                </div>
+                <div class="all_tax">Tax Vat 18%:<span>$200</span> </div>
+                <div class="all_tax">Discount 10%:<span>-$700</span> </div>
+                <div class="grand-total">Grand Total <span>$7000.00</span></div>
+            </div>
+        </div>
+
+        <!-- bottom section -->
+        <div class="bottom-section">
+            <div class="status-content">
+                <p class="sign-nature">JonathanKendry</p>
+                <hr class="sig-line"><br>
+                <p class="status">Signature</p>
+                <!-- <p><span></span></p> -->
+            </div>
         </div>
         
     </div>

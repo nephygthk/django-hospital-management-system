@@ -366,3 +366,29 @@ def make_payment(request):
 
 def view_receipt(request):
     return render(request, 'account/receipt/bill_receipt.html')
+
+
+
+# downloading and viewing pdf
+# from io import BytesIO
+# from django.http import HttpResponse
+# from django.template.loader import get_template
+# from xhtml2pdf import pisa
+
+
+# def view_billing_pdf(request, pk):
+#     billing = get_object_or_404(Billing, pk=pk)
+#     billing_item = BillingItem.objects.filter(billing=billing)
+#     template_path = 'account/receipt/bill_receipt2.html'
+#     context = {'billing': billing, 'billing_item ':billing_item }
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'filename="report.pdf"'
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     pisa_status = pisa.CreatePDF(
+#        html, dest=response)
+
+#     if pisa_status.err:
+#        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+#     return response

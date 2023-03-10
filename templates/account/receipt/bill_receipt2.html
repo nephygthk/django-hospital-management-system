@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+<style>
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 300;
+    width: 100%;
+    background: rgb(19, 18, 18);
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.page{
+    background: #fff;
+    display: block;
+    margin: 3rem auto 3rem auto;
+    position: relative;
+    box-shadow: 0 0 0.5cm rgb(0, 0, 0, 0.5);
+}
+.page[size='A4']{
+    width: 21cm;
+    /* height: 29.7cm; */
+    height: 24.7cm;
+    overflow: hidden;
+}
+.bg-primary{
+    background-color: #6a1b9a !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .logo-address h2, p{
+    font-size: 10px;
+  }
+}
+</style>
+
+
+    <title>Bill receipt</title>
+</head>
+<body>
+    <div class="page" size="A4">
+        <div class="top-section">
+            <div class="container-fluid pt-3 bg-primary">
+                <div class="row">
+                    <div class="d-flex justify-content-between">
+                        <div class="logo-address text-white">
+                            <h2>Cleveland Medical <br>Hopistal</h2>
+                            <p >3359 Powder House Road, West Palm Beach, <br> FL, Florida</p>
+                        </div>
+                        <div class="email-phone text-white" style="padding-top: 80px;">
+                            <p class="mb-0"><strong>Email:</strong> hello@gmail.com</p>
+                            <p class="mt-0"><strong>Phone:</strong> 555-666-7778</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row text-dark">
+                <div class="col-4 col-md-6">Hello</div>
+                <div class="col-4 col-md-6"></div>
+                <div class="col-4 col-md-6">Hello</div>
+            </div>
+        </div>
+        
+
+    </div>
+    
+</body>
+</html>

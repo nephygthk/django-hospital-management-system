@@ -69,6 +69,9 @@ class Patient(models.Model):
     def __str__(self):
         return self.full_name
     
+    def get_signature(self):
+        return self.full_name.replace(" ", "")
+    
 
 class Billing(models.Model):
     patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
