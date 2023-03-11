@@ -36,8 +36,10 @@ def login_user(request):
             else:
                 login(request, user)
                 return redirect('account:patient_dashboard')
+            
         else:
             messages.info(request, 'Username OR password is incorrect')
+            return redirect('account:login')
     return render(request, 'account/login.html', {})
 
 
