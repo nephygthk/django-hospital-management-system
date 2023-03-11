@@ -50,8 +50,10 @@ p{
     color: #fff;
     padding: 20px;
     height: 115px;
-    background-color: #6a1b9a;
+    /* background-color: #2e3f6d; */
+    background-color: #13C5DD;
 }
+/* #6a1b9a */
 
 .top-section h2{
     font-size: 32px;
@@ -73,7 +75,7 @@ p{
 .contact .contact-content{
     max-width: 300px;
     float: right;
-    margin-top: 82px;
+    margin-top: 72px;
 }
 
 .contact-content .email,
@@ -258,7 +260,7 @@ p{
 
 .table table tr:first-child{
     color: #fff;
-    background: #6a1b9a;
+    background: #13C5DD;
 }
 
 .table tr th:nth-child(2),
@@ -305,7 +307,7 @@ p{
 }
 
 .grandtotal_sec .grand-total{
-    background-color: #6a1b9a;
+    background-color: #13C5DD;
     color: #fff;
     padding: 10px;
 }
@@ -383,13 +385,14 @@ p{
             <div class="address">
                 <div class="address-content">
                     <h2>CLeveland Medical Center</h2>
-                    <p>3359 Powder House Road, West Palm Beach, FL, Florida</p>
+                    <p>Cleveland Medical Center, London United Kingdom</p>
                 </div>
             </div>
             <div class="contact">
                 <div class="contact-content">
-                    <div class="email">Email: <span>Contant@clevelandmedcenter.com</span></div>
-                    <div class="number">Phone: <span>555-666-7778</span></div>
+                    <div class="email">Email: <span>contant@clevelandmedcenter.com</span></div>
+                    <div class="number">Phone UK: <span>+44-330-808-4390</span></div>
+                    <div class="number">Phone US: <span>+1-412-376-828</span></div>
                 </div>
             </div>
         </div>
@@ -400,8 +403,8 @@ p{
                 Billing Invoice
             </div>
             <div class="desc">
-                <p class="code">#1234567-CDEJ783</p>
-                <p class="issue">Issued: Apr, 23, 2023<span></span></p>
+                <p class="code">#{{billing.billing_receipt}}</p>
+                <p class="issue">Issued: {{billing.billing_date}}<span></span></p>
             </div>
         </div>
         
@@ -409,21 +412,21 @@ p{
         <!-- billed to -->
         <div class="billed-to">
             <hr>
-            <div class="title">Billed To: <strong>Jeniffer Doe</strong></div>
+            <div class="title">Billed To: <strong>{{billing.patient.full_name}}</strong></div>
             <div class="billed-sec">
                 <!-- <div class="name">Jeniffer Doe</div> -->
-                <p><strong>Patient ID:</strong> #678098GG</p>
-                <p><strong>Email:</strong> jenifferdoe@gmail.com</p>
-                <p><strong>Phone:</strong> +888-555-6667</p>
-                <p><strong>Address:</strong> Block 5, Jonathan Street, Fl, Florida</p>
+                <p><strong>Patient ID:</strong> #{{billing.patient.patient_id}}</p>
+                <p><strong>Email:</strong> {{billing.patient.customer.email}}</p>
+                <p><strong>Phone:</strong> {{billing.patient.phone_number}}</p>
+                <p><strong>Address:</strong> {{billing.patient.address|slice:':29'}} <br>{{billing.patient.address|slice:'30:'}} </p>
             </div>
 
             <div class="billed-sec">
                 <div class="ship-add">
-                    <p><strong>Bill Date:</strong> Aug, 22, 1990</p>
-                    <p><strong>Birth Date:</strong> Aug, 22, 1990</p>
-                    <p><strong>Gender:</strong> Female</p>
-                    <p><strong>Doctor:</strong> Martin Luther King</p>
+                    <p><strong>Bill Date:</strong> {{billing.billing_date}}</p>
+                    <p><strong>Birth Date:</strong> {{billing.patient.date_of_birth}}</p>
+                    <p><strong>Gender:</strong> {{billing.patient.gender}}</p>
+                    <p><strong>Doctor:</strong> {{billing.patient.doctor}}</p>
                 </div>   
             </div>
         </div>
@@ -439,62 +442,15 @@ p{
                     <!-- <th>Total</th> -->
                     <!-- <th></th> -->
                 </tr>
+            {% for item in bill_items %}
                 <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.billing_specification}}</td>
+                    <td>{{item.bill_qty}}</td>
+                    <td>${{item.bill_value}}</td>
+                    <td>${{item.get_single_total}}</td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Surgery For Adaobi</td>
-                    <td>2</td>
-                    <td>$5,000</td>
-                    <td>$10,000</td>
-                </tr>
+            {% endfor %}
             </table>
         </div>
 
@@ -502,18 +458,19 @@ p{
         <div class="grandtotal_wrap">
             <div class="grandtotal_sec">
                 <div class="sub-total">
-                    SUB TOTAL: <span>$7500</span>
+                    SUB TOTAL: <span>${{billing.bill_amount}}</span>
                 </div>
                 <div class="all_tax">Tax Vat 18%:<span>$200</span> </div>
-                <div class="all_tax">Discount 10%:<span>-$700</span> </div>
-                <div class="grand-total">Grand Total <span>$7000.00</span></div>
+                <div class="all_tax">Insurance:<span>-$700</span> </div>
+                <div class="all_tax">Already Paid:<span>${{billing.paid_amount}}</span> </div>
+                <div class="grand-total">Grand Total <span>${{billing.get_balance}}</span></div>
             </div>
         </div>
 
         <!-- bottom section -->
         <div class="bottom-section">
             <div class="status-content">
-                <p class="sign-nature">JonathanKendry</p>
+                <p class="sign-nature">{{billing.patient.doctor.get_signature}}</p>
                 <hr class="sig-line"><br>
                 <p class="status">Signature</p>
                 <!-- <p><span></span></p> -->

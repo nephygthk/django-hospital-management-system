@@ -36,8 +36,8 @@ def login_user(request):
             else:
                 login(request, user)
                 return redirect('account:patient_dashboard')
-    else:
-        messages.info(request, 'Username OR password is incorrect')
+        else:
+            messages.info(request, 'Username OR password is incorrect')
     return render(request, 'account/login.html', {})
 
 
@@ -54,7 +54,7 @@ class AddPatientView(LoginRequiredMixin, TemplateView):
     
     def post(self, request, *args, **kwargs):
         registration_form = RegistrationForm(self.request.POST)
-        patient_form = PatientForm(self.request.POST)
+        patient_form = PatientForm(self.request.POST, self.request.FILES)
         if registration_form.is_valid() and patient_form.is_valid():
             user = registration_form.save(commit=False)
             user.set_password(registration_form.cleaned_data["password"])
@@ -106,7 +106,7 @@ def UpdatePatientView(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     patient = get_object_or_404(Patient, customer=customer)
     customer_form = CustomerUpdateForm(request.POST or None, instance=customer)
-    patient_form = PatientForm(request.POST or None, instance=patient)
+    patient_form = PatientForm(request.POST or None, request.FILES or None, instance=patient)
 
     if all([customer_form.is_valid(), patient_form.is_valid() ]):
         customer_form.save()
@@ -182,7 +182,7 @@ def add_new_billing(request):
                     child = form.save(commit=False)
                     child.billing = parent
                     child.save()
-                    prices.append(child.bill_value)
+                    prices.append(int(child.bill_value) * (int(child.bill_qty)))
                 # price = sum(Decimal(price)  for price in prices)
                 # print(type(price))
                 parent.bill_amount = sum(Decimal(price)  for price in prices)
@@ -213,7 +213,7 @@ def edit_billing(request, pk):
             child = form.save(commit=False)
             child.billing = parent
             child.save()
-            prices.append(child.bill_value)
+            prices.append(int(child.bill_value) * (int(child.bill_qty)))
         parent.bill_amount = sum(Decimal(price)  for price in prices)
         parent.save()
 
@@ -348,47 +348,29 @@ def patient_billing(request):
 def make_payment(request):
     payments = Payment.objects.filter(patient=request.user.patient)
     p_length = len(payments)
-    billing = get_object_or_404(Billing, patient=request.user.patient)
+    payment_form = PaymentForm()
 
-    payment_form = PaymentForm(request.POST or None)
-    if payment_form.is_valid():
-        payment = payment_form.save(commit=False)
-        payment.patient = request.user.patient
-        payment.billing = billing
-        payment.save()
-
-        messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
-        return redirect('account:make_payment')
+    if request.method == "POST":
+        try:
+            billing = Billing.objects.get(patient=request.user.patient)
+            payment_form = PaymentForm(request.POST, request.FILES)
+            if payment_form.is_valid():
+                payment = payment_form.save(commit=False)
+                payment.patient = request.user.patient
+                payment.billing = billing
+                payment.save()
+                messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
+                return redirect('account:make_payment')
+        except Billing.DoesNotExist:
+            messages.error(request, "A bill has not been issued to this customer. please contact us for more information")
 
     context = {'payments':payments, 'form': payment_form, 'p_length':p_length}
     return render(request, 'account/patient/make_payment.html', context)
 
 
-def view_receipt(request):
-    return render(request, 'account/receipt/bill_receipt.html')
+def view_receipt(request, pk):
+    billing = get_object_or_404(Billing, pk=pk)
+    bill_items = BillingItem.objects.filter(billing=billing)
 
-
-
-# downloading and viewing pdf
-# from io import BytesIO
-# from django.http import HttpResponse
-# from django.template.loader import get_template
-# from xhtml2pdf import pisa
-
-
-# def view_billing_pdf(request, pk):
-#     billing = get_object_or_404(Billing, pk=pk)
-#     billing_item = BillingItem.objects.filter(billing=billing)
-#     template_path = 'account/receipt/bill_receipt2.html'
-#     context = {'billing': billing, 'billing_item ':billing_item }
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'filename="report.pdf"'
-#     template = get_template(template_path)
-#     html = template.render(context)
-
-#     pisa_status = pisa.CreatePDF(
-#        html, dest=response)
-
-#     if pisa_status.err:
-#        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-#     return response
+    context = {'billing':billing, 'bill_items':bill_items}
+    return render(request, 'account/receipt/bill_receipt.html', context)

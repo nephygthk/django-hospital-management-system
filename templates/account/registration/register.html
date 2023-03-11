@@ -20,7 +20,7 @@
             <div class="card-body">
                 <h3 class="card-title mb-5 bg-secondary text-center text-light">Add New Patient</h3>
 
-                <form action="{% url 'account:add_patient' %}" method="POST">
+                <form action="{% url 'account:add_patient' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% if registration_form.errors %}
@@ -113,25 +113,31 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ patient_form.admission_date.id_for_label }}" class="form-label fw-bold text-white">Admition Date</label>
                                 {{ patient_form.admission_date}}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ patient_form.discharge_date.id_for_label }}" class="form-label fw-bold text-white">Discharge Date</label>
                                 {{ patient_form.discharge_date}}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="{{ patient_form.doctor.id_for_label }}" class="form-label fw-bold text-white">Doctor</label>
                                 {{ patient_form.doctor}}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ patient_form.doctor.id_for_label }}" class="form-label fw-bold text-white">Upload Image</label>
+                                {{ patient_form.picture}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <!-- <label for="{{ patient_form.pass_text.id_for_label }}" class="form-label fw-bold text-white">Doctor</label> -->
                                 {{ patient_form.pass_text}}
@@ -139,8 +145,12 @@
                         </div>
                         
                     </div>
+                    <button id="my-btn" class="btn btn-primary py-2 mb-4 mt-5 fw-bold w-100" type="submit" >
+                        Create Now
+                        <span id="btn-load" class="ms-4"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                    </button>
                     
-                    <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                    <!-- <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                    -->
                 </form>
             </div>
         </div>

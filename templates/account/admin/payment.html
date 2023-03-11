@@ -33,8 +33,8 @@
                 <tr>
                   <td>{{payment.patient.full_name}}</td>
                   <td>{{payment.amount}}</td>
-                  <td>{{payment.receipt}}</td>
-                  <td>{{payment.payment_summary}}</td>
+                  <td><a href="{{payment.receipt.url}}"><img src="{{payment.receipt.url}}" class="img-fluid" style="width: 100px; height: 30px;"></a></td>
+                  <td>{{payment.payment_summary|slice:":40"}}......</td>
                   <td>{{payment.date_created}}</td>
                   <td><a href="{% url 'account:delete_payment' payment.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>              
                 </tr>

@@ -137,7 +137,7 @@
     text-decoration: none;
     background-color: transparent; }
     a:hover {
-      color: #0056b3;
+      color: #6a1b9a;
       text-decoration: underline; }
   
   a:not([href]):not([tabindex]) {
@@ -8214,7 +8214,7 @@
         color: #fff;
         display: block;
         padding: 10px 30px;
-        background: #2f89fc; }
+        background: #13C5DD; }
     #sidebar ul.components {
       padding: 0; }
     #sidebar ul li {
@@ -8230,14 +8230,14 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         #sidebar ul li a:hover {
           color: #fff;
-          background: #2f89fc;
-          border-bottom: 1px solid #2f89fc; }
+          background: #13C5DD;
+          border-bottom: 1px solid #13C5DD; }
       #sidebar ul li.active > a {
         background: transparent;
         color: #fff; }
         #sidebar ul li.active > a:hover {
-          background: #2f89fc;
-          border-bottom: 1px solid #2f89fc; }
+          background: #13C5DD;
+          border-bottom: 1px solid #13C5DD; }
     @media (max-width: 991.98px) {
       #sidebar {
         margin-left: -250px; }

@@ -27,7 +27,7 @@
                 {% endif %}
                 <h5 class="card-title mb-5 bg-secondary text-center text-light">Upload Payment Receipt</h5>
                 
-                <form action="{% url 'account:make_payment' %}" method="POST">
+                <form action="{% url 'account:make_payment' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% if form.errors %}
@@ -56,7 +56,6 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary text-white w-100 fw-bold float-end"><i class="fa-solid fa-right-to-bracket me-3 text-white"></i>Submit</button>  
-                    <!-- <input type="submit" value="Submit" class="btn btn-primary text-white w-100 fw-bold float-end">                    -->
                     
                 </form>
             </div>
@@ -80,8 +79,7 @@
                         <th scope="col">Balance To Be Paid</th>
                         <th scope="col">Admitted On</th>
                         <th scope="col">Payment Date</th>
-                        <!-- <th scope="col">Invoice Date</th> -->
-                        <th scope="col">Receipt</th>
+                        <th scope="col">View Receipt</th>
                       </tr>
                       <hr>
                     </thead>
@@ -97,9 +95,8 @@
                         <td>{{bill.billing.paid_amount}}</td>
                         <td>{{bill.billing.get_balance}}</td>
                         <td>{{bill.patient.admission_date}}</td>
-                        <!-- <td>{{bill.patient.discharge_date}}</td> -->
                         <td>{{bill.date_created}}</td>
-                        <td><a href="" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                        <td><a href="{{bill.receipt.url}}" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
                       </tr>
                     {% endfor %}
                     </tbody>

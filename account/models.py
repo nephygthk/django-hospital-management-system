@@ -1,3 +1,4 @@
+import random
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -44,6 +45,9 @@ class Doctor(models.Model):
 
     def __str__(self):
         return self.doc_name
+    
+    def get_signature(self):
+        return self.doc_name.replace(" ", "")
 
     
 class Patient(models.Model):
@@ -58,6 +62,7 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     admission_date = models.DateField()
     discharge_date = models.DateField(null=True, blank=True)
+    picture = models.ImageField(upload_to='patient_pictures', default='default-img.jpg')
     pass_text = models.CharField(max_length=130, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -80,7 +85,8 @@ class Billing(models.Model):
     billing_date = models.DateField()
     bill_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    # balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    billing_receipt = models.CharField(max_length=30, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -89,6 +95,13 @@ class Billing(models.Model):
 
     def __str__(self):
         return self.patient.full_name
+    
+    def save(self, *args, **kwargs):
+        if self.billing_receipt == '' or self.billing_receipt == None:
+            num = random.randint(0000000, 9999999)
+            num2 = random.randint(000, 999)
+            self.billing_receipt = f'{num}-CMCEJ{num2}'
+        super(Billing, self).save(*args, **kwargs)
     
 
     def get_balance(self):
@@ -136,7 +149,7 @@ class Payment(models.Model):
     billing = models.ForeignKey(Billing, related_name='payment', on_delete=models.CASCADE, null=True, blank=True)
     patient = models.ForeignKey(Patient, related_name='payment', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    receipt = models.CharField(max_length=150)
+    receipt = models.FileField(upload_to='payement_receipts', null=True, blank=True)
     payment_summary = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

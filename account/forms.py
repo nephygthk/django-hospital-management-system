@@ -16,7 +16,7 @@ class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['full_name','patient_id','gender', 'date_of_birth', 'blood_group','address',
-                  'phone_number', 'admission_date','discharge_date','doctor','pass_text']
+                  'phone_number', 'admission_date','discharge_date','doctor','picture', 'pass_text']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

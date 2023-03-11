@@ -50,7 +50,7 @@
                         <td>{{bill.patient.admission_date}}</td>
                         <td>{{bill.patient.discharge_date}}</td>
                         <td>{{bill.created}}</td>
-                        <td><a href="{% url 'account:view_receipt' %}" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                        <td><a href="{% url 'account:view_receipt' bill.id %}" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
                       </tr>
                     {% endfor %}
                     </tbody>
@@ -66,7 +66,9 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="row align-item-center justify-content-between">
-                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <img src="{{bill.patient.picture.url}}" class="img-fluid" style="height: 280px;">
+                            </div>
                             <div class="col-md-6">
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex justify-content-between align-items-start border-0">

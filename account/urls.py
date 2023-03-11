@@ -35,7 +35,7 @@ urlpatterns = [
     path('patient_billing/', views.patient_billing, name='patient_billing'),
     path('make_payment/', views.make_payment, name='make_payment'),
     path('<pk>/delete_payment/', views.delete_payment, name='delete_payment'),
-    path('view_receipt/', views.view_receipt, name='view_receipt'),
+    path('<pk>/view_receipt/', views.view_receipt, name='view_receipt'),
 
     # pdf
     # path('<pk>/view_billing_pdf/', views.view_billing_pdf, name='view_billing_pdf'),

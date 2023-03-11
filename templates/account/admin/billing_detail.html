@@ -14,7 +14,9 @@
         <div class="card shadow">
             <div class="card-body">
                 <div class="row align-item-center justify-content-between">
-                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <img src="{{bill.patient.picture.url}}" class="img-fluid" style="height: 270px;">
+                    </div>
                     <div class="col-md-6">
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-start border-0">
@@ -22,6 +24,12 @@
                                 <div class="fw-bold">Patient Name:</div>
                               </div>
                               <span>{{bill.patient.full_name}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Doctor Name:</div>
+                              </div>
+                              <span>{{bill.patient.doctor.doc_name}}</span>
                             </li>
 
                             <li class="list-group-item d-flex justify-content-between align-items-start border-0">
@@ -80,9 +88,9 @@
                 <tbody class="table-dark border-0">
                     {% for billing in bill_items %}
                     <tr>
-                      <td>{{billing.billing_specification}}</td>
-                      <td>{{billing.bill_value}}</td>
+                      <td>{{billing.billing_specification}}</td>               
                       <td>{{billing.bill_qty}}</td>
+                      <td>{{billing.bill_value}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

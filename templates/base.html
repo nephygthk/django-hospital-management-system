@@ -13,6 +13,12 @@
 
     <!-- custom styles -->
     {% block extra_css %} <link rel="stylesheet" href="{% static 'css/main.css' %}"> {% endblock %}
+
+    <style>
+        #btn-load {
+            visibility: hidden;
+        }  
+    </style>
     
   </head>
   <body class="bg-light">
@@ -36,5 +42,16 @@
 
     <!-- extra js -->
     {% block extra_js %} <script src="{% static 'js/main.js' %}"></script> {% endblock%}
+
+    <script>
+        const myBtn = document.getElementById('my-btn')
+        const loaderBtn = document.getElementById('btn-load')
+    
+        myBtn.addEventListener('click', ()=>{
+            loaderBtn.style.visibility = 'visible'
+            myBtn.style.backgroundColor = "#727a74";
+            myBtn.style.borderColor = "#727a74";
+        })
+    </script>
   </body>
 </html>

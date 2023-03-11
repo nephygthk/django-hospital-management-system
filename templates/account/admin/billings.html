@@ -49,7 +49,7 @@
                   <td><a href="{% url 'account:billing_detail' bill.id %}" class="btn btn-info fw-bold btn-sm">Detail</a></td>
                   <td><a href="{% url 'account:edit_billing' bill.id %}"><i class="fa-solid fa-pen"></i></a></td>
                   <td><a href="{% url 'account:delete_billing' bill.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
-                  <td><a hreflang=""><i class="fa-solid fa-download text-success"></i></a></td>
+                  <td><a href="{% url 'account:view_receipt' bill.id %}"><i class="fa-solid fa-download text-info"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
