@@ -1,0 +1,364 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Mr+Dafoe&family=Roboto+Condensed:wght@300;400;700&display=swap');
+
+
+    /* whole page */
+    .page{
+        background: #fff;
+        display: block;
+        margin: 3rem auto 3rem auto;
+        position: relative;
+        box-shadow: 0 0 0.5cm rgb(0, 0, 0, 0.5);
+    }
+    .page[size='A4']{
+        width: 21cm;
+        /* height: 29.7cm; */
+        height: 27.7cm;
+        overflow: hidden;
+    }
+    .bg-primary{
+        background-color: #13C5DD !important;
+    }
+    .text-primary{
+        color: rgb(226, 168, 8) !important;
+        text-shadow: 2px 2px #f54646;
+    }
+
+    .sign{
+        font-family: 'Mr Dafoe';
+        font-size: 20px;
+    }
+  
+    #logo-img-background{
+        width: 180px;
+        position: absolute;
+        top: 18%;
+        right: 39%;
+        z-index: 0;
+    }
+
+    /* .billed-to{
+        position: absolute;
+        z-index: 1;
+    } */
+
+    @media only screen and (max-width: 600px) {
+
+        .page[size='A4']{
+        width: 9.5cm;
+        /* height: 29.7cm; */
+        height: 19cm;
+        overflow: hidden;
+        }
+
+        /* top-sectoon */
+        .top-section h2{
+            font-size: 14px;
+        }
+        .top-section p{
+            font-size: 8.5px;
+        }
+
+        /* invoice info */
+        .invoice-info h5{
+            font-size: 13px;
+        }
+        .invoice-info p{
+            font-size: 9px;
+        }
+
+        /* billed to */
+        .billed-to h5{
+            font-size: 13px;
+        }
+
+        .billed-to p{
+            font-size: 9px;
+        }
+
+        /* first table */
+        .table-responsive{
+            font-size:9px !important;
+        }
+
+        /* signature */
+        .sign{
+            font-size: 12px;
+        }
+        .h6{
+            font-size: 10px;
+        }
+    }
+</style>
+
+
+  </head>
+  <body class="bg-dark">
+
+    <div class="page" size="A4">
+
+        <!-- top sectoion -->
+        <section class="top-section bg-info">
+            <div class="container">  
+
+                <div class="row pt-md-2 pt-1 text-white">
+                    <div class="col-7 col-md-8">
+                        <h2 class="text-primary logo">Cleveland Hospital</h2>
+                        <p class="small">Cleveland Medical Center, London, <br> United Kingdom</p>
+                    </div>
+                    <div class="col-5 col-md-4 pt-md-4">
+                        
+                                <p class="mb-0"><strong>Phone UK:</strong> <span>+44-330-808-4390</span></p>
+                                <p class="mb-0"><strong>Phone US: </strong><span>+1-412-376-828</span></p>
+                                <p><span>contant@clevelandmedcenter.org</span></p>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- invoice info section -->
+        <section class="invoice-info pt-md-3 pt-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-7" >
+                        <h5>Billing Invoice</h5>
+                    </div>
+                    <div class="col-md-4 col-5">
+                        <h5 class="mb-0">#{{billing.billing_receipt}}</h5>
+                        <p class="text-muted small ms-4 fw-bold mt-0">Issued: {{billing.billing_date}}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="mt-0 mt-md-2">
+
+        <!-- billed-to section -->
+        <section class="billed-to">
+            <div class="container">
+                <img id="logo-img-background" src="{% static 'images/default-img.jpg' %}" alt="" >
+                <div class="row">
+                    <div class="col-md-8 col-7">
+                        <h5 class="mb-4">Billed To: <span class="text-info">{{billing.patient.full_name}}</span></h5>
+                        <p class="mb-0"><strong>Patient ID:</strong> #{{billing.patient.patient_id}}</p>
+                        <p class="mb-0"><strong>Email:</strong> {{billing.patient.customer.email}}</p>
+                        <p class="mb-0"><strong>Phone:</strong> {{billing.patient.phone_number}}</p>
+                        <p class="mb-0"><strong>Address:</strong> {{billing.patient.address|slice:':29'}} <br>{{billing.patient.address|slice:'30:'}} </p>
+                    </div>
+                    <div class="col-md-4 col-5 pt-md-4 pt-3">
+                        <div class="pt-4">
+                            <p class="mb-0"><strong>Bill Date:</strong> {{billing.billing_date}}</p>
+                            <p class="mb-0"><strong>Birth Date:</strong> {{billing.patient.date_of_birth}}</p>
+                            <p class="mb-0"><strong>Gender:</strong> {{billing.patient.gender}}</p>
+                            <p class="mb-0"><strong>Doctor:</strong> {{billing.patient.doctor}}</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr>
+
+        <!-- first table -->
+        <section class="first-table">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-secondary text-center table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>Admission Date:</td>
+                                        <td style="background: #d6d1d1;"">{{billing.patient.admission_date}}</td>
+                                        <td>Package Name:</td>
+                                        <td style="background: #d6d1d1;">Gast Testing</td>
+                                        <td>Total Days:</td>
+                                        <td style="background: #d6d1d1;">{{billing.days_spent}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Discharge Date:</td>
+                                        <td style="background: #d6d1d1; color: green;">{{billing.patient.discharge_date}}</td>
+                                        <td>Insurance Name:</td>
+                                        <td style="background: #d6d1d1;">Feeding</td>
+                                        <td>Policy No.</td>
+                                        <td style="background: #d6d1d1;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- service table -->
+        <section class="services-rendered">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-secondary text-center table-sm">
+                                <thead class="bg-info border-top-info">
+                                  <tr>
+                                    <th scope="col">SL</th>
+                                    <th scope="col">Service Name</th>
+                                    <th scope="col">QTY</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Total</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in bill_items %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{item.billing_specification}}</td>
+                                        <td>{{item.bill_qty}}</td>
+                                        <td>${{item.bill_value}}</td>
+                                        <td>${{item.get_single_total}}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- grand total -->
+        <section class="grand-total">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-7">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-secondary text-center table-sm">
+                                <thead class="text-center bg-secondary border-secondary">
+                                  <tr>
+                                    <th scope="col-12">Advance Payment</th>
+                                    <th scope="col-12"></th>
+                                    <th scope="col-12"></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>Date</td>
+                                    <td>Receipt</td>
+                                    <td>Amount</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- second table -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-secondary text-center table-sm">
+                                <thead class="bg-info text-center fw-400">
+                                  <tr>
+                                    <th scope="col-12">Assigned Date:</th>
+                                    <!-- <th scope="col-12">Discharge Date:</th> -->
+                                    <th scope="col-12">Total Days:</th>
+                                    <th scope="col-12">Bed Number:</th>
+                                    <th scope="col-12">Amount:</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <!-- <td>@mdo</td> -->
+                                    <td>@mdo</td>
+                                    <td>100</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        
+                    </div>
+
+
+                    <!-- checkout -->
+                    <div class="col-md-4 col-5">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered border-secondary table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-secondary"><strong>Sub-total</strong></td>
+                                        <td class="bg-secondary"><strong>${{billing.bill_amount}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bed Bill</td>
+                                        <td><strong>100</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Advance Paid</td>
+                                        <td><strong>5000</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Discount(0.98%)</td>
+                                        <td><strong>2000</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tax(0.00%)</td>
+                                        <td><strong>0.00</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-info"><strong>Grand Total</strong></td>
+                                        <td class="bg-info"><strong>${{billing.get_balance}}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="signature pt-md-5 pt-3">
+            <div class="container pt-md-3">
+                <div class="row">
+                    <div class="col-2">
+                        <p class="mb-0 sign">{{billing.patient.doctor.get_signature}}</p>
+                        <hr class="my-0">
+                        <div class="h6">Signature</div> 
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+            
+
+        
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  </body>
+</html>

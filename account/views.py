@@ -14,7 +14,7 @@ from decimal import Decimal
 from .models import (Apointment, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
 from .forms import (AddDoctorForm, BillSpecificationForm,
-            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, UploadImageForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -316,6 +316,24 @@ def delete_payment(request, pk):
     messages.success(request, 'payment deleted successfully')
     return redirect('account:payment_list')
 
+from .utils import compress
+
+@login_required
+def upload_image(request, pk):
+    patient = get_object_or_404(Patient, pk=pk)
+    form = UploadImageForm(instance=patient)
+    if request.method == "POST":
+        form = UploadImageForm(request.POST, request.FILES, instance=patient)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.picture = compress(image.picture)
+            image.save()
+            messages.success(request, "image uploaded successfully")
+            return redirect("account:all_patient")
+    context = {'form':form}
+    return render(request, 'account/admin/upload_image.html', context)
+
+
 
 
 # Patient side
@@ -375,4 +393,4 @@ def view_receipt(request, pk):
     bill_items = BillingItem.objects.filter(billing=billing)
 
     context = {'billing':billing, 'bill_items':bill_items}
-    return render(request, 'account/receipt/bill_receipt.html', context)
+    return render(request, 'account/receipt/bill_receipt3.html', context)

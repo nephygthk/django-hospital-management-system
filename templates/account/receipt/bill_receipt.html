@@ -234,15 +234,18 @@ p{
 
 /* invoice table */
 
-.table{
+.table,
+.table2{
     padding: 0 20px;
-    -pdf-keep-in-frame-mode: shrink;
+    /* -pdf-keep-in-frame-mode: shrink; */
 }
 
-.table table{
+.table table,
+.table2 table{
     width: 100%;
 }
 
+.table2 table, th,
 .table table, th,td{
     padding: 5px;
     text-align: center;
@@ -269,11 +272,21 @@ p{
     width: 300px;
 }
 
+/* table2 */
+/* .td-k td{
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #616161;
+    border-collapse: collapse;
+} */
+
 @media only screen and (max-width: 600px) {
-    .table{
+    .table,
+    .table2{
         padding: 0 20px;
     }
 
+    .table table, th,td,
     .table table, th,td{
         padding: 3px;      
     }
@@ -281,6 +294,10 @@ p{
     .table tr th,
     .table tr td{
         font-size: 13px;
+    }
+    .table2 tr th,
+    .table2 tr td{
+        font-size: 10px;
     }
 }
 
@@ -430,6 +447,30 @@ p{
                 </div>   
             </div>
         </div>
+        <!-- first table -->
+        <div class="table2" style="margin-bottom: 10px;">
+            <table>
+                <tr class="td-k">
+                    <td>Admission Date:</td>
+                    <td style="background: #d6d1d1;">{{billing.billing_date}}</td>
+                    <td>Package Name:</td>
+                    <td style="background: #d6d1d1;">Gast Testing</td>
+                    <td>Total Days</td>
+                    <td style="background: #d6d1d1;">{{billing.days_spent}}</td>
+                </tr>
+                <tr>
+                    <td>Discharge Date:</td>
+                    <td style="background: #d6d1d1;">{{billing.patient.discharge_date}}</td>
+                    <td>Insurance Name:</td>
+                    <td style="background: #d6d1d1;">Feeding</td>
+                    <td>Policy No.</td>
+                    <td style="background: #d6d1d1;"></td>
+                </tr>
+            </table>
+        </div>
+
+
+
         <!-- invoice table -->
         <div class="table">
             <table>

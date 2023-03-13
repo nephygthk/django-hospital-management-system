@@ -27,6 +27,7 @@ urlpatterns = [
     path('<pk>/delete_billing_specification/', views.delete_billing_specification, name='delete_billing_specification'),
     path('payment_list/', views.PaymentListView.as_view(), name='payment_list'),
     path('add_prescription/', views.PrescriptionView.as_view(), name='add_prescription'),
+    path('<pk>/upload_image/', views.upload_image, name='upload_image'),
     
 
     # patient urls

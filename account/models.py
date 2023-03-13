@@ -8,6 +8,8 @@ from django.db import models
 from .managers import CustomAccountManager
 from decimal import Decimal
 
+from .utils import compress
+
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
@@ -62,7 +64,7 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     admission_date = models.DateField()
     discharge_date = models.DateField(null=True, blank=True)
-    picture = models.ImageField(upload_to='patient_pictures', default='default-img.jpg')
+    picture = models.FileField(upload_to='patient_pictures', default='default-img.jpg')
     pass_text = models.CharField(max_length=130, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -71,12 +73,19 @@ class Patient(models.Model):
         verbose_name_plural = "Patients"
         ordering = ('-created',)
 
+
+    # def save(self, *args, **kwargs):
+    #     new_image = compress(self.picture)
+    #     self.picture = new_image
+    #     super().save(*args, **kwargs)
+
     def __str__(self):
         return self.full_name
     
     def get_signature(self):
         return self.full_name.replace(" ", "")
-    
+
+
 
 class Billing(models.Model):
     patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
@@ -156,6 +165,12 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ('-date_created',)
+
+
+    def save(self, *args, **kwargs):
+        new_image = compress(self.receipt)
+        self.receipt = new_image
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.patient.full_name

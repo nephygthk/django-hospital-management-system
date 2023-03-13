@@ -33,7 +33,7 @@
                   <th scope="col">Mobile</th>
                   <th scope="col">Password</th>
                   <th scope="col">Admited On</th>
-                  <!-- <th scope="col"></th> -->
+                  <th scope="col"></th>
                 </tr>
             </thead>
         
@@ -49,7 +49,7 @@
                   <td>{{patient.phone_number}}</td>
                   <td>{{patient.pass_text}}</td>
                   <td>{{patient.admission_date}}</td>
-                  <!-- <td><a href=""><i class="fa-solid fa-pen"></i></a></td> -->
+                  <td><a href="{% url 'account:upload_image' patient.id %}" class="btn btn-info fw-bold btn-sm">Photo</a></td>
                 </tr>
             {% endfor %}
             </tbody>
