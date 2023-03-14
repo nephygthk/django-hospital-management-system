@@ -86,11 +86,16 @@
                                 {{ billing_form.report_summary }}
                             </div>
                         </div>             
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="{{ billing_form.days_spent.id_for_label}}" class="form-label fw-bold text-white">Days Spent <span class="text-white small">
-                                    (Optional)</span></label>
+                                <label for="{{ billing_form.days_spent.id_for_label}}" class="form-label fw-bold text-white">Days Spent</label>
                                 {{ billing_form.days_spent }}
+                            </div>
+                        </div>             
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.currency.id_for_label}}" class="form-label fw-bold text-white">Currency</label>
+                                {{ billing_form.currency }}
                             </div>
                         </div>             
                     </div>

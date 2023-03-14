@@ -19,11 +19,12 @@
         margin: 3rem auto 3rem auto;
         position: relative;
         box-shadow: 0 0 0.5cm rgb(0, 0, 0, 0.5);
+        z-index: -2;
     }
     .page[size='A4']{
         width: 21cm;
         /* height: 29.7cm; */
-        height: 27.7cm;
+        height: 27.9cm;
         overflow: hidden;
     }
     .bg-primary{
@@ -38,14 +39,29 @@
         font-family: 'Mr Dafoe';
         font-size: 20px;
     }
+    #logo{
+        width: 200px;
+    }
   
     #logo-img-background{
-        width: 180px;
+        width: 350px;
         position: absolute;
-        top: 18%;
-        right: 39%;
-        z-index: 0;
+        top: 29%;
+        right: 29%;
+        /* Add the blur effect */
+        filter: blur(8px);
+        -webkit-filter: blur(8px);
+        z-index: -2;
     }
+    /* .overlay{
+        width: 350px;
+        height: 140px;
+        position: absolute;
+        top: 23%;
+        right: 29%;
+        background-color: rgba(0,0,0, 0.4);
+        z-index: -1;
+    } */
 
     /* .billed-to{
         position: absolute;
@@ -98,6 +114,12 @@
         .h6{
             font-size: 10px;
         }
+        #logo-img-background{
+            width: 200px;
+        }
+        #logo{
+        width: 80px;
+        }
     }
 </style>
 
@@ -113,10 +135,11 @@
 
                 <div class="row pt-md-2 pt-1 text-white">
                     <div class="col-7 col-md-8">
-                        <h2 class="text-primary logo">Cleveland Hospital</h2>
+                        <img id="logo" src="{% static 'images/logoc.png' %}" alt="" >
+                        <!-- <h2 class="text-primary logo">Cleveland Hospital</h2> -->
                         <p class="small">Cleveland Medical Center, London, <br> United Kingdom</p>
                     </div>
-                    <div class="col-5 col-md-4 pt-md-4">
+                    <div class="col-5 col-md-4 pt-md-5 pt-3">
                         
                                 <p class="mb-0"><strong>Phone UK:</strong> <span>+44-330-808-4390</span></p>
                                 <p class="mb-0"><strong>Phone US: </strong><span>+1-412-376-828</span></p>
@@ -146,7 +169,8 @@
         <!-- billed-to section -->
         <section class="billed-to">
             <div class="container">
-                <img id="logo-img-background" src="{% static 'images/default-img.jpg' %}" alt="" >
+                <div class="overlay"></div>
+                <img id="logo-img-background" src="{% static 'images/logoc.png' %}" alt="" >
                 <div class="row">
                     <div class="col-md-8 col-7">
                         <h5 class="mb-4">Billed To: <span class="text-info">{{billing.patient.full_name}}</span></h5>
@@ -274,10 +298,10 @@
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
+                                    <td>{{billing.patient.admission_date}}</td>
+                                    <td>{{billing.days_spent}}</td>
                                     <!-- <td>@mdo</td> -->
-                                    <td>@mdo</td>
+                                    <td>01</td>
                                     <td>100</td>
                                   </tr>
                                 </tbody>
@@ -304,11 +328,11 @@
                                     </tr>
                                     <tr>
                                         <td>Advance Paid</td>
-                                        <td><strong>5000</strong></td>
+                                        <td><strong>{{billing.paid_amount}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Discount(0.98%)</td>
-                                        <td><strong>2000</strong></td>
+                                        <td><strong>{{billing.get_discount}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Tax(0.00%)</td>
@@ -327,8 +351,8 @@
             </div>
         </section>
 
-        <section class="signature pt-md-5 pt-3">
-            <div class="container pt-md-3">
+        <section class="signature pt-md-3 pt-2">
+            <div class="container">
                 <div class="row">
                     <div class="col-2">
                         <p class="mb-0 sign">{{billing.patient.doctor.get_signature}}</p>

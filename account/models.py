@@ -1,3 +1,4 @@
+import math
 import random
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -83,7 +84,9 @@ class Patient(models.Model):
         return self.full_name
     
     def get_signature(self):
-        return self.full_name.replace(" ", "")
+        name = self.full_name.replace(" ", "")
+        doctor = self.full_name.replace("Dr", "")
+        return f'{doctor}{name}' 
 
 
 
@@ -96,6 +99,7 @@ class Billing(models.Model):
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     # balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     billing_receipt = models.CharField(max_length=30, null=True, blank=True)
+    currency = models.CharField(max_length=5)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -114,7 +118,13 @@ class Billing(models.Model):
     
 
     def get_balance(self):
-        return self.bill_amount - self.paid_amount
+        discount = math.floor((self.bill_amount * Decimal(0.98)) / 100)
+        all_deduct = self.paid_amount + discount + 100
+        balance = self.bill_amount - all_deduct
+        return balance
+
+    def get_discount(self):
+        return math.floor((self.bill_amount * Decimal(0.98)) / 100)
     
 
 class BillingSpecification(models.Model):
