@@ -74,12 +74,6 @@ class Patient(models.Model):
         verbose_name_plural = "Patients"
         ordering = ('-created',)
 
-
-    # def save(self, *args, **kwargs):
-    #     new_image = compress(self.picture)
-    #     self.picture = new_image
-    #     super().save(*args, **kwargs)
-
     def __str__(self):
         return self.full_name
     
@@ -91,15 +85,22 @@ class Patient(models.Model):
 
 
 class Billing(models.Model):
+
+    Currency = (
+        ("$", "USD"),
+        ("£", "Pounds"),
+        ("€", "Euro"),
+    )
+
+
     patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
     report_summary = models.TextField(null=True, blank=True)
     days_spent = models.IntegerField(null=True, blank=True)
     billing_date = models.DateField()
     bill_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    # balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     billing_receipt = models.CharField(max_length=30, null=True, blank=True)
-    currency = models.CharField(max_length=5)
+    currency = models.CharField(max_length=10, choices=Currency)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -128,7 +129,7 @@ class Billing(models.Model):
     
 
 class BillingSpecification(models.Model):
-    spec_name = models.CharField(max_length=150, null=True, blank=True)
+    spec_name = models.CharField(max_length=150)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

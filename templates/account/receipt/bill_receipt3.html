@@ -135,7 +135,7 @@
 
                 <div class="row pt-md-2 pt-1 text-white">
                     <div class="col-7 col-md-8">
-                        <img id="logo" src="{% static 'images/logoc.png' %}" alt="" >
+                        <img id="logo" src="{% static 'images/logoy.png' %}" alt="" >
                         <!-- <h2 class="text-primary logo">Cleveland Hospital</h2> -->
                         <p class="small">Cleveland Medical Center, London, <br> United Kingdom</p>
                     </div>
@@ -170,7 +170,7 @@
         <section class="billed-to">
             <div class="container">
                 <div class="overlay"></div>
-                <img id="logo-img-background" src="{% static 'images/logoc.png' %}" alt="" >
+                <img id="logo-img-background" src="{% static 'images/logoy.png' %}" alt="" >
                 <div class="row">
                     <div class="col-md-8 col-7">
                         <h5 class="mb-4">Billed To: <span class="text-info">{{billing.patient.full_name}}</span></h5>
@@ -248,8 +248,8 @@
                                         <td>{{forloop.counter}}</td>
                                         <td>{{item.billing_specification}}</td>
                                         <td>{{item.bill_qty}}</td>
-                                        <td>${{item.bill_value}}</td>
-                                        <td>${{item.get_single_total}}</td>
+                                        <td>{{item.billing.currency}}{{item.bill_value}}</td>
+                                        <td>{{item.billing.currency}}{{item.get_single_total}}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -302,7 +302,7 @@
                                     <td>{{billing.days_spent}}</td>
                                     <!-- <td>@mdo</td> -->
                                     <td>01</td>
-                                    <td>100</td>
+                                    <td>{{billing.currency}}100</td>
                                   </tr>
                                 </tbody>
                             </table>
@@ -320,27 +320,27 @@
                                 <tbody>
                                     <tr>
                                         <td class="bg-secondary"><strong>Sub-total</strong></td>
-                                        <td class="bg-secondary"><strong>${{billing.bill_amount}}</strong></td>
+                                        <td class="bg-secondary"><strong>{{billing.currency}}{{billing.bill_amount}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Bed Bill</td>
-                                        <td><strong>100</strong></td>
+                                        <td><strong>{{billing.currency}}100</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Advance Paid</td>
-                                        <td><strong>{{billing.paid_amount}}</strong></td>
+                                        <td><strong>{{billing.currency}}{{billing.paid_amount}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Discount(0.98%)</td>
-                                        <td><strong>{{billing.get_discount}}</strong></td>
+                                        <td><strong>{{billing.currency}}{{billing.get_discount}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Tax(0.00%)</td>
-                                        <td><strong>0.00</strong></td>
+                                        <td><strong>{{billing.currency}}0.00</strong></td>
                                     </tr>
                                     <tr>
                                         <td class="bg-info"><strong>Grand Total</strong></td>
-                                        <td class="bg-info"><strong>${{billing.get_balance}}</strong></td>
+                                        <td class="bg-info"><strong>{{billing.currency}}{{billing.get_balance}}</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

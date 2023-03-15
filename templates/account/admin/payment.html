@@ -32,7 +32,7 @@
             {% for payment in payments %}
                 <tr>
                   <td>{{payment.patient.full_name}}</td>
-                  <td>{{payment.amount}}</td>
+                  <td>{{payment.billing.currency}}{{payment.amount}}</td>
                   <td><a href="{{payment.receipt.url}}"><img src="{{payment.receipt.url}}" class="img-fluid" style="width: 100px; height: 30px;"></a></td>
                   <td>{{payment.payment_summary|slice:":40"}}......</td>
                   <td>{{payment.date_created}}</td>

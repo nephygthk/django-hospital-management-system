@@ -42,9 +42,9 @@
             {% for bill in billings %}
                 <tr>
                   <td>{{bill.patient}}</td>
-                  <td>{{bill.bill_amount}}</td>
-                  <td>{{bill.paid_amount}}</td>
-                  <td>{{bill.get_balance}}</td>
+                  <td>{{bill.currency}}{{bill.bill_amount}}</td>
+                  <td>{{bill.currency}}{{bill.paid_amount}}</td>
+                  <td>{{bill.currency}}{{bill.get_balance}}</td>
                   <td>{{bill.billing_date}}</td>
                   <td><a href="{% url 'account:billing_detail' bill.id %}" class="btn btn-info fw-bold btn-sm">Detail</a></td>
                   <td><a href="{% url 'account:edit_billing' bill.id %}"><i class="fa-solid fa-pen"></i></a></td>
