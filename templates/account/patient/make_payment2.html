@@ -1,0 +1,173 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark shadow rounded card-sm">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h5 class="card-title mb-5 bg-secondary text-center text-light">Upload Payment Receipt</h5>
+                
+                <form id="my-form" action="{% url 'account:make_payment' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="amount" class="form-label fw-bold text-white">Amount Paid:</label>
+                            <input type="text" name="amount" class="form-control" id="amount">
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{form.receipt.id_for_label}}" class="form-label fw-bold text-white">Upload Payment Receipt:</label>
+                            <input class="form-control" type="file" id="receipt-img" accept="image/*"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="summary" class="form-label fw-bold text-white">Receipt Summary:</label>
+                            <textarea name="summary" class="form-control" id="summary" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <input type="submit" value="Submit">
+                    <!-- <button type="submit" class="btn btn-primary text-white w-100 fw-bold float-end"><i class="fa-solid fa-right-to-bracket me-3 text-white"></i>Submit</button>   -->
+                    <!-- <button id="my-btn" class="btn btn-primary py-2 mb-4 mt-5 fw-bold w-100" type="submit" >
+                        Sign in
+                        <span id="btn-load" class="ms-4"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                    </button> -->
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="img-display">
+    
+</div>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-info">
+                      <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Total Bill</th>
+                        <th scope="col">Total Paid</th>
+                        <th scope="col">Balance To Be Paid</th>
+                        <th scope="col">Admitted On</th>
+                        <th scope="col">Payment Date</th>
+                        <th scope="col">View Receipt</th>
+                      </tr>
+                      <hr>
+                    </thead>
+                    <tbody>
+                        
+                {% if p_length != 0 %}
+                    {% for bill in payments %}
+                      <tr>
+                        <td>{{bill.patient.patient_id}}</td>
+                        <td>{{bill.patient.full_name}}</td>
+                        <td>{{bill.patient.doctor}}</td>
+                        <td>{{bill.billing.bill_amount}}</td>
+                        <td>{{bill.billing.paid_amount}}</td>
+                        <td>{{bill.billing.get_balance}}</td>
+                        <td>{{bill.patient.admission_date}}</td>
+                        <td>{{bill.date_created}}</td>
+                        <td><a href="{{bill.receipt.url}}" class="btn btn-info btn-sm fw-bold w-100"><i class="fa-solid fa-download text-white"></i></a></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-center">There are no available data to display</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    const myForm = document.getElementById('my-form')
+    const receiptImg = document.getElementById('receipt-img')
+
+    myForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const endpoint = "{% url 'account:make_payment' %}";
+        const formData = new FormData();
+        file = receiptImg.files[0];
+        console.log(file)
+
+        new_image = compressImage(file)
+    })
+
+    function compressImage(element){
+        let reader = new FileReader();
+        url = reader.readAsDataURL(element)
+        let final_image_url = "";
+        reader.onload = function(event){
+            let image_url = event.target.result
+            let image = document.createElement("img")
+            image.src = image_url
+
+            image.onload = function(e){
+                let canvas =  document.createElement('canvas')
+                const maxWidth = 130
+                const scaleSize = maxWidth/e.target.width
+                canvas.width = maxWidth //image.width
+                canvas.height = e.target.height * scaleSize // image.height
+
+                const context = canvas.getContext("2d")
+                context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+                let mimeType = image.mimeType
+                let quality = 10
+
+                let new_image_url = context.canvas.toDataURL(mimeType, quality)
+
+                let new_image = document.createElement("img")
+                new_image.src = new_image_url
+
+                urlToFile(new_image_url);
+
+                document.getElementById('img-display').appendChild(new_image)
+                // console.log("img-url", new_image_url)
+            }       
+        }
+    }
+
+    function urlToFile(url){
+        let arr = url.split(",")
+
+        let mime = arr[0].match(/:(.*?);/)[1]
+        let data = arr[1]
+
+        let dataStr = atob(data) // decoding the data
+        let n = dataStr.length
+        let dataArray = new Int8Array(n)
+
+        while(n--){
+            dataArray[n] = dataStr.charCodeAt()
+        }
+        let file = new File([dataArray], 'File.jpg', {type: mime})
+        console.log(file)
+    }
+
+    
+</script>
+
+{% endblock %}
+// let canvas =  document.createElement('canvas')
+        

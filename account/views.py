@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import (ListView, TemplateView, CreateView,
                                 UpdateView, DetailView)
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from decimal import Decimal
 
 
@@ -364,28 +364,31 @@ def patient_billing(request):
     return render(request, 'account/patient/patient_billing.html', context)
 
 
+import json
+  
 @login_required
 def make_payment(request):
     payments = Payment.objects.filter(patient=request.user.patient)
     p_length = len(payments)
-    payment_form = PaymentForm()
 
     if request.method == "POST":
         try:
             billing = Billing.objects.get(patient=request.user.patient)
-            payment_form = PaymentForm(request.POST, request.FILES)
-            if payment_form.is_valid():
-                payment = payment_form.save(commit=False)
-                payment.patient = request.user.patient
-                payment.billing = billing
-                payment.save()
-                messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
-                return redirect('account:make_payment')
+            image = request.FILES.get('image')
+            amount = Decimal(request.POST.get('amount'))
+            summary = request.POST.get('summary')
+
+            Payment.objects.create(billing=billing, patient=request.user.patient,
+                                amount=amount, receipt=image, payment_summary=summary)
+            response = JsonResponse({"data": "success"})
+            return response
         except Billing.DoesNotExist:
             messages.error(request, "A bill has not been issued to this customer. please contact us for more information")
+            return redirect('account:make_payment')
+        
 
-    context = {'payments':payments, 'form': payment_form, 'p_length':p_length}
-    return render(request, 'account/patient/make_payment.html', context)
+    context = {'payments':payments,'p_length':p_length}
+    return render(request, 'account/patient/make_payment1.html', context)
 
 
 def view_receipt(request, pk):
@@ -394,3 +397,29 @@ def view_receipt(request, pk):
 
     context = {'billing':billing, 'bill_items':bill_items}
     return render(request, 'account/receipt/bill_receipt3.html', context)
+
+
+
+
+# @login_required
+# def make_payment(request):
+#     payments = Payment.objects.filter(patient=request.user.patient)
+#     p_length = len(payments)
+#     payment_form = PaymentForm()
+
+#     if request.method == "POST":
+#         try:
+#             billing = Billing.objects.get(patient=request.user.patient)
+#             payment_form = PaymentForm(request.POST, request.FILES)
+#             if payment_form.is_valid():
+#                 payment = payment_form.save(commit=False)
+#                 payment.patient = request.user.patient
+#                 payment.billing = billing
+#                 payment.save()
+#                 messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
+#                 return redirect('account:make_payment')
+#         except Billing.DoesNotExist:
+#             messages.error(request, "A bill has not been issued to this customer. please contact us for more information")
+
+#     context = {'payments':payments, 'form': payment_form, 'p_length':p_length}
+#     return render(request, 'account/patient/make_payment1.html', context)
