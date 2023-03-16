@@ -4,6 +4,12 @@
 
 {% block sub_base_content %}
 
+<style>
+    #json-msg{
+        display: none;
+    }
+</style>
+
 <div class="row align-items-center justify-content-center">
     <div class="col-md-5">
         <div class="card bg-dark shadow rounded card-sm">
@@ -16,6 +22,10 @@
                         </div>
                     {% endfor %}
                 {% endif %}
+                <div id="json-msg" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <h5 class="card-title mb-5 bg-secondary text-center text-light">Upload Payment Receipt</h5>
                 
                 <form id="my-form" class="form">
@@ -102,24 +112,21 @@
 <script>
     const myForm = document.getElementById('my-form')
     const receiptImg = document.getElementById('receipt-img')
+    const jsonMsg = document.getElementById('json-msg')
 
     myForm.addEventListener('submit', e => {
         e.preventDefault();
         const formData = new FormData(event.target);
         file = receiptImg.files[0];
-        // formData.append("file", file)
-        // const value = Object.fromEntries(formData.entries());
-        // console.log(file)
-        // console.log(value)
-
         new_image = compressImage(file, formData)
+        myForm.reset();
     })
 
     function compressImage(file, formData){
-        const MAX_WIDTH = 640;
-        const MAX_HEIGHT = 320;
+        const MAX_WIDTH = 1000;
+        const MAX_HEIGHT = 500;
         const MIME_TYPE = "image/jpeg";
-        const QUALITY = 80;
+        const QUALITY = 90;
 
 
         const blobURL = URL.createObjectURL(file);
@@ -137,18 +144,14 @@
             URL.revokeObjectURL(this.src);
             const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
             const canvas = document.createElement("canvas");
-            canvas.width = newWidth;
-            canvas.height = newHeight;
+            canvas.width = img.width//newWidth;
+            canvas.height = img.height//newHeight;
             const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             canvas.toBlob(
                 (blob) => {
                     let file_blop = new File([blob], 'File.jpg', {type: "image/jpeg"})
                     formData.append("image", file_blop)
-                    const value = Object.fromEntries(formData.entries());
-                    console.log("file",blob)
-                    console.log("value",value)
-                    
 
                     // sending to server
                     const endpoint = "{% url 'account:make_payment' %}";
@@ -162,17 +165,21 @@
                     })
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("Success:", data);
+                        jsonMsg.style.display = "block"
+                        jsonMsg.innerHTML = "Payment receipt uploaded successfully, awaiting verification. Thank you!"
+                        // console.log("Success:", data);
                     })
                     .catch((error) => {
-                        console.error("Error:", error);
+                        jsonMsg.style.display = "block"
+                        jsonMsg.innerHTML = "Something went wrong, please try again"
+                        // console.error("Error:", error);
                     });
                     
                 },
                 MIME_TYPE,
                 QUALITY
             );
-            document.getElementById('img-display').appendChild(canvas)
+            // document.getElementById('img-display').appendChild(canvas)
         };
     }
 
