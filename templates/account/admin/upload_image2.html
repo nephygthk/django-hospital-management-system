@@ -1,0 +1,109 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<style>
+    #up-msg{
+        display: none;
+    }
+</style>
+<!-- <h2 class="mb-4 text-primary">Add a Patient</h2> -->
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-9">
+        <div class="card bg-dark shadow rounded card-sm">
+            <div class="card-body">
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Upload Image for {{patient.full_name}}</h3>
+
+                <div id="up-msg" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form id="my-form" action="." method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="profile-pic" class="form-label fw-bold text-white">Patient Profile Image:</label>
+                        <input class="form-control" type="file" id="profile-pic">
+                    </div>
+                    <input type="submit" value="Upload" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const myForm = document.getElementById('my-form')
+    const receiptImg = document.getElementById('profile-pic')
+    const upMsg = document.getElementById('up-msg')
+
+    myForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const formData = new FormData();
+        image = receiptImg.files[0];
+        formData.append('image',image)
+
+        console.log(image)
+        // sending to server
+        const endpoint = "{% url 'account:upload_image' patient.id %}";
+
+        // assigning csrf token to a variable
+        let csrftoken = getCookie('csrftoken');
+
+
+        //posting data information to django
+        fetch(endpoint, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken 
+        },
+        body: formData, 
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            myForm.reset();
+            upMsg.innerHTML = 'Success! Image uploaded successfully';
+            setTimeout(function(){ 
+                upMsg.style.display = "";
+            }, 1000);
+            console.log("Success:", data);
+        })
+        .catch((error) => {
+            myForm.reset();
+            upMsg.innerHTML = 'Sorry! There was an error uploading your image. try again ';
+            setTimeout(function(){ 
+                upMsg.style.display = "";
+            }, 1000);
+            console.error("Error:", error);
+        });
+
+
+
+        
+    })
+
+    //getting csrf token 
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+    }
+
+
+    
+</script>
+
+{% endblock %}

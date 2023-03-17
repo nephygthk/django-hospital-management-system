@@ -38,6 +38,17 @@
     </div>
     {% endblock %}
 
+    
+    <!-- google tramslator sdk -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- google translator normal javascript -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        }
+    </script>
+
 
     <!-- j query -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
@@ -59,5 +70,7 @@
             myBtn.style.borderColor = "#727a74";
         })
     </script>
+
+    
   </body>
 </html>

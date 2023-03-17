@@ -316,22 +316,61 @@ def delete_payment(request, pk):
     messages.success(request, 'payment deleted successfully')
     return redirect('account:payment_list')
 
-from .utils import compress
+from .utils import compress, drastic_compress, small_compress
 
 @login_required
 def upload_image(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
-    form = UploadImageForm(instance=patient)
     if request.method == "POST":
-        form = UploadImageForm(request.POST, request.FILES, instance=patient)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.picture = compress(image.picture)
-            image.save()
-            messages.success(request, "image uploaded successfully")
-            return redirect("account:all_patient")
-    context = {'form':form}
-    return render(request, 'account/admin/upload_image.html', context)
+        image = request.FILES.get('image')
+        print(image.size)
+        if image.size > 300000:
+            print("it's greater than 300")
+            try:
+                final_image = drastic_compress(image)
+            except OSError:
+                pass
+
+        elif image.size > 169000 and image.size < 300000:
+            print("it's greater than 169")
+            try:
+                final_image = compress(image)
+            except OSError:
+                pass
+            
+        else:
+            try:
+                final_image = small_compress(image)
+            except OSError:
+                pass
+        patient.picture = final_image
+        patient.save()
+
+        response = JsonResponse({"data": "success"})
+        return response
+        
+    context = {'patient':patient}
+    return render(request, 'account/admin/upload_image2.html', context)
+
+
+
+# @login_required
+# def upload_image(request, pk):
+#     patient = get_object_or_404(Patient, pk=pk)
+#     form = UploadImageForm(instance=patient)
+#     if request.method == "POST":
+#         form = UploadImageForm(request.POST, request.FILES, instance=patient)
+#         if form.is_valid():
+#             image = form.save(commit=False)
+#             image.picture = compress(image.picture)
+#             image.save()
+#             messages.success(request, "image uploaded successfully")
+#             return redirect("account:all_patient")
+#     context = {'form':form, 'patient':patient}
+#     return render(request, 'account/admin/upload_image2.html', context)
+
+
+
 
 
 
