@@ -114,12 +114,7 @@ class BillingItemForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['billing']
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-
-    #     for field in self.fields:
-    #         self.fields[field].widget.attrs.update({'class': 'form-control'})
-
+ 
 class CustomerUpdateForm(forms.ModelForm):
     email = forms.EmailField(max_length=100, help_text='Required', error_messages={
         'required': 'Sorry, you will need an email'})

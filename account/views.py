@@ -4,8 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import (ListView, TemplateView, CreateView,
-                                UpdateView, DetailView)
+from django.views.generic import (ListView, TemplateView, CreateView)
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from decimal import Decimal
