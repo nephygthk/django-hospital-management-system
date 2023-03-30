@@ -395,14 +395,15 @@ def patient_status(request):
 
 @login_required
 def patient_billing(request):
-    bills = Billing.objects.filter(patient=request.user.patient)
-    bill_items = BillingItem.objects.filter(billing=request.user.patient.billing)
+    try:
+        bills = Billing.objects.filter(patient=request.user.patient)
+        bill_items = BillingItem.objects.filter(billing=request.user.patient.billing)
 
-    context = {'bills':bills, 'bill_items': bill_items}
-    return render(request, 'account/patient/patient_billing.html', context)
+        context = {'bills':bills, 'bill_items': bill_items}
+        return render(request, 'account/patient/patient_billing.html', context)
+    except:
+        return render(request, 'account/patient/patient_billing.html')
 
-
-import json
   
 @login_required
 def make_payment(request):
@@ -435,6 +436,30 @@ def view_receipt(request, pk):
 
     context = {'billing':billing, 'bill_items':bill_items}
     return render(request, 'account/receipt/bill_receipt3.html', context)
+
+
+from django.core.mail import send_mail
+
+def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        try:
+            send_mail(
+                'Message From '+name+' <'+email+'>',
+                message,
+                'contact@clevelandmedcenter.org',
+                ['contact@clevelandmedcenter.org'],
+                fail_silently=False,
+            )
+            messages.success(request, 'Email sent successfully, we will get back to you as soon as possible')
+        except:
+            messages.error(request, 'There was an error while trying to send your email, please try again')
+
+        finally:
+            return redirect('account:contact')  
+    return render(request, 'account/patient/contact.html')
 
 
 

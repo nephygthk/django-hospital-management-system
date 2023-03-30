@@ -1,0 +1,51 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark shadow rounded card-sm">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h5 class="card-title mb-5 bg-secondary text-center text-light">Contact Us</h5>
+                
+                <form action="." method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold text-white">Full Name</label>
+                        <input name="name" type="text" class="form-control" id="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold text-white">Your Email address</label>
+                        <input name="email" type="email" class="form-control" id="email">
+                    </div>
+
+                    <!-- <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input name="subject" type="text" class="form-control" id="subject">
+                    </div> -->
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-bold text-white">Message</label>
+                        <textarea class="form-control" id="message" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary text-white w-100 fw-bold float-end"><i class="fa-solid fa-right-to-bracket me-3 text-white"></i>Send</button>  
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

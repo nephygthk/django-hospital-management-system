@@ -55,6 +55,9 @@
             <li class="active">
                 <a href="{% url 'account:make_payment' %}"><span class="fa-regular fa-credit-card mr-3"></span> Make Payment</a>
             </li>
+            <li class="active">
+                <a href="{% url 'account:contact' %}"><span class="fa-regular fa-calendar-check mr-3"></span>Contact Us</a>
+            </li>
             {% endif %}
         </ul>
         <a href="{% url 'account:logout' %}" class="btn btn-danger fw-bold w-100"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a>
