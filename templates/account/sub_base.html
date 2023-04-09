@@ -16,7 +16,7 @@
         </div>
       <a href="{% url 'account:admin_dashboard' %}" class="logo"><img id="logo-img-background" class="my-3 ms-3" src="{% static 'images/logoff.png' %}" style="width: 200px;" ></a>
       <!-- <h1><a href="{% url 'account:admin_dashboard' %}" class="logo">Cleveland Medical Center</a></h1> -->
-        <ul class="list-unstyled components mb-5">
+        <ul class="list-unstyled components mb-2">
             {%  if request.user.is_staff %}
                 <li class="active">
                     <a href="{% url 'account:admin_dashboard' %}"><span class="fa fa-home mr-3"></span> Dashboard</a>
@@ -38,6 +38,9 @@
                 </li>
                 <li>
                     <a href="{% url 'account:payment_list' %}"><span class="fa-regular fa-credit-card mr-3"></span> View Payment</a>
+                </li>
+                <li>
+                    <a href="{% url 'account:address' %}"><span class="fa-regular fa-credit-card mr-3"></span> Addresses</a>
                 </li>
             {% else %}
             <li class="active">

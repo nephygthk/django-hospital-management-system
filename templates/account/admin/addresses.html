@@ -1,0 +1,146 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark shadow rounded card-sm">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}                
+                
+                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add New Address
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row pt-5">
+    <div class="table-responsive">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                  <th scope="col">Address</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Country</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                </tr>
+            </thead>
+        
+            <tbody class="table-dark border-0">
+            {% for address in addresses %}
+                <tr>
+                  <td>{{address.address_name}}</td>
+                  <td>{{address.city}}</td>
+                  <td>{{address.country}}</td>
+                  <td>{% if address.is_default%}Selected{% else %}None{% endif%}</td>
+                  <td>{% if not address.is_default%}<a href="{% url 'account:address_default' address.id %}" class="btn btn-info btn-sm fw-bold"> Make Default</a>{% endif%}</td>
+                  <td><a href="{% url 'account:delete_address' address.id %}" class="btn btn-danger btn-sm fw-bold"> Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>                                                                        
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Add New Address</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form action="." method="POST">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="{{ form.doc_name.id_for_label}}" class="form-label fw-bold text-white">Address</label>
+                    {{ form.address_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.doc_email.id_for_label}}" class="form-label fw-bold text-white">City</label>
+                    {{ form.city }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.mobile.id_for_label}}" class="form-label fw-bold text-white">Country</label>
+                    {{ form.country }}
+                </div>
+                    
+                <button id="my-btn" class="btn btn-primary py-2 mb-4 mt-5 fw-bold w-100" type="submit" >
+                    Add address
+                    <span id="btn-load" class="ms-4"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                </button>
+                <!-- <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                    -->
+            </form>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+<!-- <form action="." method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <p class="text-white fw-bold">Please correct the following errors:</p>
+        {% for field in form %}
+            {% if field.errors %}
+            <div class="alert alert-primary" role="alert">
+                {{ field.label }}: {{ field.errors|striptags }}
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="mb-3">
+        <label for="{{ form.doc_name.id_for_label}}" class="form-label fw-bold text-white">Address</label>
+        {{ form.address_name }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.doc_email.id_for_label}}" class="form-label fw-bold text-white">City</label>
+        {{ form.city }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.mobile.id_for_label}}" class="form-label fw-bold text-white">Country</label>
+        {{ form.country }}
+    </div>
+        
+    <button id="my-btn" class="btn btn-primary py-2 mb-4 mt-5 fw-bold w-100" type="submit" >
+        Add address
+        <span id="btn-load" class="ms-4"><i class="fa-solid fa-spinner fa-spin"></i></span>
+    </button>
+</form> -->

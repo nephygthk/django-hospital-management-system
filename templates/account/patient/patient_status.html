@@ -32,7 +32,7 @@
                         <p class="fw-bold kpom">Email Address:</p>
                         <p class="fw-bold kpom">Mobile Number:</p>
                         <p class="fw-bold kpom">Hospital Name:</p>
-                        <p class="fw-bold kpom">Hospital Address:</p>
+                        <!-- <p class="fw-bold kpom">Hospital Address:</p> -->
                         <p class="fw-bold kpom">Admitted On:</p>
                     </div>
                     <div class="col-7 text-dark" >
@@ -41,11 +41,11 @@
                         <p class="kpom">{{patient.gender}}</p>
                         <p class="kpom">{{patient.date_of_birth}}</p>
                         <p class="kpom">{{patient.blood_group}}</p>
-                        <p class="kpom">{{patient.address}}</p>
+                        <p class="kpom" style="font-size: 12px;">{{patient.address}}</p>
                         <p class="kpom">{{request.user.email}}</p>
                         <p class="kpom">{{patient.phone_number}}</p>
                         <p class="kpom">Cleveland Medical Center</p>
-                        <p class="kpom">24 Portland Place, London, W18 1LU</p>
+                        <!-- <p class="kpom">{{address.address_name}}</p> -->
                         <p class="kpom">{{patient.admission_date}}</p>
                     </div>
                 </div>

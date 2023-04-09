@@ -194,3 +194,13 @@ class Apointment(models.Model):
         return self.patient.full_name
 
 
+class Address(models.Model):
+    address_name = models.CharField(max_length=300)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.address_name
+
+
