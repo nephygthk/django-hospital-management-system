@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 <!doctype html>
 <html lang="en">
@@ -254,8 +255,8 @@
                                         <td>{{forloop.counter}}</td>
                                         <td>{{item.billing_specification}}</td>
                                         <td>{{item.bill_qty}}</td>
-                                        <td>{{item.billing.currency}}{{item.bill_value}}</td>
-                                        <td>{{item.billing.currency}}{{item.get_single_total}}</td>
+                                        <td>{{item.billing.currency}}{{item.bill_value|intcomma}}</td>
+                                        <td>{{item.billing.currency}}{{item.get_single_total|intcomma}}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -326,7 +327,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="bg-secondary"><strong>Sub-total</strong></td>
-                                        <td class="bg-secondary"><strong>{{billing.currency}}{{billing.bill_amount}}</strong></td>
+                                        <td class="bg-secondary"><strong>{{billing.currency}}{{billing.bill_amount|intcomma}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Bed Bill</td>
@@ -334,7 +335,7 @@
                                     </tr>
                                     <tr>
                                         <td>Advance Paid</td>
-                                        <td><strong>{{billing.currency}}{{billing.paid_amount}}</strong></td>
+                                        <td><strong>{{billing.currency}}{{billing.paid_amount|intcomma}}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Discount(0.98%)</td>
@@ -346,7 +347,7 @@
                                     </tr>
                                     <tr>
                                         <td class="bg-info"><strong>Grand Total</strong></td>
-                                        <td class="bg-info"><strong>{{billing.currency}}{{billing.get_balance}}</strong></td>
+                                        <td class="bg-info"><strong>{{billing.currency}}{{billing.get_balance|intcomma}}</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

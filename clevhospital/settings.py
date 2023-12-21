@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # external
+    'django.contrib.humanize',
+    
     # my own apps
     'account',
     'frontend',

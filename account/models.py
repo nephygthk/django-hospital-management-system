@@ -50,7 +50,9 @@ class Doctor(models.Model):
         return self.doc_name
     
     def get_signature(self):
-        return self.doc_name.replace(" ", "")
+        name = self.doc_name.replace(" ", "")
+        doctor = name.replace("Dr.", "")
+        return f'{doctor}' 
 
     
 class Patient(models.Model):
@@ -77,10 +79,10 @@ class Patient(models.Model):
     def __str__(self):
         return self.full_name
     
-    def get_signature(self):
-        name = self.full_name.replace(" ", "")
-        doctor = self.full_name.replace("Dr", "")
-        return f'{doctor}{name}' 
+    # def get_signature(self):
+    #     name = self.full_name.replace(" ", "")
+    #     doctor = self.name.replace("Dr.", "")
+    #     return f'{doctor}{name}' 
 
 
 

@@ -62,6 +62,7 @@ class AddPatientView(LoginRequiredMixin, TemplateView):
             user.save()
             patient = patient_form.save(commit=False)
             patient.customer = user
+            patient.pass_text = registration_form.cleaned_data["password"]
             patient.save()
             
             messages.success(
