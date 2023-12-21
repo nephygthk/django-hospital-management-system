@@ -4,8 +4,72 @@
 
 {% block content %}
 
+<style>
+    .banner-head{
+        position: relative;
+    }
+
+    .carousel-item{
+        height: 100vh !important;
+        min-height: 180px;
+        object-fit: cover;
+        
+    }
+
+    .overlay{
+        display:block;
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        background:rgba(0,0,0,0.4);
+    }
+    .carousel-caption{
+        bottom: 180px;
+    }
+
+    .carousel-caption h5{
+        font-size: 50px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 25px;
+        color: #fff;
+    }
+    .carousel-caption p{
+        width: 70%;
+        margin: auto;
+        font-size: 18px;
+        line-height: 1.9;
+    }
+
+    /* @media only screen and (max-width:767px){
+        .carousel-item{
+            height: 100vh !important;
+        }
+        .navbar-collapse{
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8) ;
+        }
+        .carousel-caption{
+            bottom: 200px;
+        }
+        .carousel-caption h5{
+            font-size: 24px;
+        }
+        .carousel-caption a{
+            padding: 5px 20px;
+            font-size: 15px;
+        }
+        .carousel-caption p{
+            font-size: 14px;
+            width: 100%;
+        }
+    } */
+</style>
+
 <!-- Hero Start -->
-<div class="container-fluid bg-primary py-5 mb-5 hero-header">
+<!-- <div class="container-fluid bg-primary py-5 mb-5 hero-header">
     <div class="container py-5">
         <div class="row justify-content-start">
             <div class="col-lg-8 text-center text-lg-start">
@@ -18,8 +82,63 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Hero End -->
+
+<div class="banner-head">
+
+    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="overlay"></div>
+            <video src="{% static 'images/video/video-one.mp4' %}" autoplay loop muted class="d-block w-100 img-fluid"></video>
+
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Welcome To Cleveland Medical Center</h5>
+                <p>Best Healthcare Solution for you and your family</p>
+                <!-- <p><a href="">Get Started</a></p> -->
+            </div>
+
+          </div>
+          <div class="carousel-item">
+            <div class="overlay"></div>
+            <video src="{% static 'images/video/video-two-two.mp4' %}" autoplay loop muted class="d-block w-100 img-fluid"></video>
+
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Welcome To Cleveland Medical Center</h5>
+                <p>Best Healthcare Solution for you and your family</p>
+                <!-- <p><a href="">Get Started</a></p> -->
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="overlay"></div>
+            <video src="{% static 'images/video/video-three.mp4' %}" autoplay loop muted class="d-block w-100 img-fluid"></video>
+
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Welcome To Cleveland Medical Center</h5>
+                <p>Best Healthcare Solution for you and your family</p>
+                <!-- <p><a href="">Get Started</a></p> -->
+            </div>
+
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+</div>
+
 
 
 <!-- About Start -->

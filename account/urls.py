@@ -8,7 +8,8 @@ app_name = "account"
 urlpatterns = [
     path('login/', views.login_user, name='login'),
     
-    path("logout/", auth_views.LogoutView.as_view(next_page="/account/login/"), name="logout"),
+    path("logout/", views.logout_user, name="logout"),
+    # path("logout/", auth_views.LogoutView.as_view(next_page="/account/login/"), name="logout"),
 
     # admin urls
     path('admin_dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),

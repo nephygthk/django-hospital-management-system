@@ -5,7 +5,7 @@ from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import (ListView, TemplateView, CreateView)
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from decimal import Decimal
 
@@ -20,7 +20,7 @@ def login_user(request):
         if request.user.is_staff:
             return redirect('account:admin_dashboard')
         else:
-            return redirect('account:patient_dashboard')
+            return redirect('account:patient_status')
         
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -41,6 +41,10 @@ def login_user(request):
             return redirect('account:login')
     return render(request, 'account/login.html', {})
 
+
+def logout_user(request):
+    logout(request)
+    return redirect('account:login')
 
 
 class AddPatientView(LoginRequiredMixin, TemplateView):
