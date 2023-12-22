@@ -3,7 +3,7 @@ from django.forms import formset_factory, modelformset_factory
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
-from .models import (Billing, BillingItem, BillingSpecification,
+from .models import (Address, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
 
 
@@ -155,6 +155,17 @@ class PaymentForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['address_name','city', 'country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
 class UploadImageForm(forms.ModelForm):

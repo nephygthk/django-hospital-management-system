@@ -40,6 +40,12 @@ urlpatterns = [
     path('<pk>/delete_payment/', views.delete_payment, name='delete_payment'),
     path('<pk>/view_receipt/', views.view_receipt, name='view_receipt'),
 
+
+    # addresses
+    path('address/', views.add_and_view_addresses, name='address'),
+    path('<pk>/', views.default_address, name='address_default'),
+    path('delete/<pk>/', views.delete_address, name='delete_address'),
+
     # pdf
     # path('<pk>/view_billing_pdf/', views.view_billing_pdf, name='view_billing_pdf'),
 ]

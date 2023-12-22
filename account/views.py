@@ -10,9 +10,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from decimal import Decimal
 
 
-from .models import (Apointment, Billing, BillingItem, BillingSpecification,
+from .models import (Address, Apointment, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
-from .forms import (AddDoctorForm, BillSpecificationForm,
+from .forms import (AddDoctorForm, AddressForm, BillSpecificationForm,
             BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, UploadImageForm)
 
 def login_user(request):
@@ -357,6 +357,33 @@ def upload_image(request, pk):
     return render(request, 'account/admin/upload_image2.html', context)
 
 
+def add_and_view_addresses(request):
+    addresses = Address.objects.all()
+    address_form = AddressForm(request.POST or None)
+
+    if address_form.is_valid():
+        address_form.save()
+        messages.info(request, 'The new address was added successfully')
+        return redirect('account:address')
+
+    context = {'form':address_form, 'addresses':addresses}
+    return render(request, 'account/admin/addresses.html', context)
+
+
+def default_address(request, pk):
+    Address.objects.filter(is_default=True).update(is_default=False)
+    Address.objects.filter(pk=pk).update(is_default=True)
+    return redirect('account:address')
+
+
+def delete_address(request, pk):
+    address = Address.objects.get(id=pk)
+    if address.is_default == True:
+        messages.error(request, "This address can't be delected because it is currently selected. deselect to delete")
+    else:
+        address.delete()
+        messages.success(request, 'Address deleted successfully')
+    return redirect('account:address')
 
 # @login_required
 # def upload_image(request, pk):
@@ -438,9 +465,11 @@ def make_payment(request):
 def view_receipt(request, pk):
     billing = get_object_or_404(Billing, pk=pk)
     bill_items = BillingItem.objects.filter(billing=billing)
+    address = Address.objects.get(is_default=True)
 
-    context = {'billing':billing, 'bill_items':bill_items}
+    context = {'billing':billing, 'bill_items':bill_items, 'address':address}
     return render(request, 'account/receipt/bill_receipt3.html', context)
+
 
 
 from django.core.mail import send_mail

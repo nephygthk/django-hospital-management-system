@@ -39,6 +39,9 @@
                 <li>
                     <a href="{% url 'account:payment_list' %}"><span class="fa-regular fa-credit-card mr-3"></span> View Payment</a>
                 </li>
+                <li>
+                    <a href="{% url 'account:address' %}"><span class="fa-regular fa-credit-card mr-3"></span> Addresses</a>
+                </li>
             {% else %}
             <li class="active">
                 <a href="{% url 'account:patient_dashboard' %}"><span class="fa fa-home mr-3"></span> Dashboard</a>
