@@ -52,7 +52,7 @@ class Doctor(models.Model):
     def get_signature(self):
         name = self.doc_name.replace(" ", "")
         doctor = name.replace("Dr.", "")
-        return f'{doctor}' 
+        return f'{name}' 
 
     
 class Patient(models.Model):

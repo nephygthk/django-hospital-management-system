@@ -30,6 +30,25 @@ class PatientForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
+class EditPatientForm(forms.ModelForm):
+
+    class Meta:
+        model = Patient
+        fields = ['full_name','patient_id','gender', 'date_of_birth', 'blood_group','address',
+                  'phone_number', 'admission_date','discharge_date','doctor','picture', 'pass_text']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # self.fields['pass_text'].widget = forms.HiddenInput()
+        self.fields['date_of_birth'].widget = DateInput()
+        self.fields['admission_date'].widget = DateInput()
+        self.fields['discharge_date'].widget = DateInput()
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
 class RegistrationForm(forms.ModelForm):
     email = forms.EmailField(max_length=100, help_text='Required', error_messages={
         'required': 'Sorry, you will need an email'})

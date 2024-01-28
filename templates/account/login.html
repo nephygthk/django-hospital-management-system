@@ -36,7 +36,9 @@
                             <label for="password" class="form-label fw-bold">Password</label>
                             <input type="password" name="password" class="form-control" id="password" placeholder="email">
                         </div>
+                        <input type="checkbox" class="mt-3" onclick="myFunction()">Show Password
                         <div class="d-grid gap-2">
+                            
                         <button id="my-btn" class="btn btn-primary py-2 mb-4 mt-5 fw-bold" type="submit" >
                             Sign in
                             <span id="btn-load" class="ms-4"><i class="fa-solid fa-spinner fa-spin"></i></span>
@@ -60,5 +62,15 @@
         loaderBtn.style.visibility = 'visible'
         myBtn.style.backgroundColor = "#727a74";
     })
+</script>
+<script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
 </script>
 {% endblock %}

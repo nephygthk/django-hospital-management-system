@@ -13,7 +13,7 @@ from decimal import Decimal
 from .models import (Address, Apointment, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
 from .forms import (AddDoctorForm, AddressForm, BillSpecificationForm,
-            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, UploadImageForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, EditPatientForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -112,7 +112,7 @@ def UpdatePatientView(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     patient = get_object_or_404(Patient, customer=customer)
     customer_form = CustomerUpdateForm(request.POST or None, instance=customer)
-    patient_form = PatientForm(request.POST or None, request.FILES or None, instance=patient)
+    patient_form = EditPatientForm(request.POST or None, request.FILES or None, instance=patient)
 
     if all([customer_form.is_valid(), patient_form.is_valid() ]):
         customer_form.save()
@@ -129,6 +129,31 @@ def delete_patient_account(request, pk):
     customer.delete()
     messages.success(request, 'Patient deleted successfully')
     return redirect('account:admin_dashboard')
+
+
+@login_required
+def change_patient_password(request, pk):
+    if request.method == 'POST':
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        print(password1)
+        if password1 != password2:
+            messages.error(request, 'The password and the repeat password does not match, please try again')
+            return redirect('account:admin_dashboard', pk=pk)
+        else:
+            customer = Customer.objects.get(pk=pk)
+            patient = Patient.objects.get(customer=customer)
+            print(patient.pass_text)
+            print(password1)
+
+
+            patient.pass_text = password1
+            patient.save()
+            customer.set_password(password1)
+            customer.save()   
+        return redirect('account:admin_dashboard')
+    
+    return render(request, 'account/admin/change_customer_passward.html')
 
 
 class AdminDashboardView(LoginRequiredMixin, ListView):

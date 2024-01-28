@@ -29,6 +29,7 @@
                   <th scope="col">Admited On</th>
                   <th scope="col"></th>
                   <th scope="col"></th>
+                  <th scope="col"></th>
                 </tr>
             </thead>
         
@@ -47,6 +48,7 @@
                   <td>{{customer.patient.admission_date}}</td>
                   <td><a href="{% url 'account:update_patient' customer.id %}"><i class="fa-solid fa-pen"></i></a></td>
                   <td><a href="{% url 'account:delete_patient' customer.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                  <td><a href="{% url 'account:change_patient_password' customer.id %}" class="btn btn-primary btn-sm">Pass</a></td>
                 </tr>
                 {% endwith %}
             {% endfor %}
